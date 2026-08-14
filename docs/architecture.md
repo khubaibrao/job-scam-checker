@@ -7,10 +7,10 @@ in Phase 2—the rule engine. The theme owns layout, navigation, typography,
 metadata, and editorial templates. Production has no build service or package
 manager requirement.
 
-Phase 1 intentionally sends no checker request and stores no visitor message.
-The browser script handles only the character counter and the development-phase
-notice. Phase 2 will introduce a same-origin WordPress endpoint and local PHP rule
-analysis.
+The browser sends checker requests only to a nonce-protected, same-origin
+WordPress REST endpoint. Local PHP rules analyze the message in memory. The
+message is discarded after the response and is not written to WordPress data,
+statistics, logs, transients, URLs, or browser-generated result markup.
 
 ## Compatibility target
 
@@ -26,8 +26,10 @@ pages, never overwrites an existing matching slug, stores the resulting IDs, and
 assigns the generated Home page as the static front page. Later phases can append
 page definitions to this framework.
 
-## Data in Phase 1
+## Application data
 
-Only the plugin version and generated page IDs are stored in WordPress options.
-No pasted messages, analytics, statistics, cookies, or personally identifying
-visitor data are stored by the custom code.
+The plugin version, schema version, and generated page IDs are stored in options.
+Rule definitions live in the custom WordPress rules table. Rate limits store a
+short-lived counter under a salted one-way network identifier. No pasted
+messages, analytics, statistics, cookies, or identifying visitor content are
+stored by the custom code.

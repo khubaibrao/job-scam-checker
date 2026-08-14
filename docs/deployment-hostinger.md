@@ -18,10 +18,11 @@ service.
 The plugin activation routine creates `/home/` and `/job-scam-checker/` only when
 those slugs do not already exist. Existing pages are preserved.
 
-## Phase 1 preview behavior
+## Checker behavior
 
-The form is intentionally a visual shell. Pressing **CHECK NOW** does not transmit
-or save the message and explains that analysis arrives in Phase 2.
+Pressing **CHECK NOW** sends the message only to the site’s own WordPress REST
+endpoint. The PHP rule engine returns a score, level, warning signs, explanations,
+and suspicious domain findings. The submitted message is not stored.
 
 No production Node.js process, Composer packages, cron worker, external API,
 Redis instance, separate database, visitor account, or paid service is needed.

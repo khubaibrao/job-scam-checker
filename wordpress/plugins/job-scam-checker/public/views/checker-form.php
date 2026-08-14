@@ -34,9 +34,23 @@ if ( ! defined( 'ABSPATH' ) ) {
             <?php esc_html_e( 'CHECK NOW', 'job-scam-checker' ); ?>
         </button>
 
-        <p class="jsc-phase-notice" data-jsc-phase-notice hidden tabindex="-1">
-            <?php esc_html_e( 'Message analysis is being added in the next development phase. Nothing was submitted or stored.', 'job-scam-checker' ); ?>
-        </p>
-        <noscript><p class="jsc-phase-notice"><?php esc_html_e( 'Message analysis will be enabled in the next development phase.', 'job-scam-checker' ); ?></p></noscript>
+        <p class="jsc-checker-status" data-jsc-status role="status" aria-live="polite"></p>
+        <noscript><p class="jsc-phase-notice"><?php esc_html_e( 'JavaScript is required to run the checker. Your message has not been sent or stored.', 'job-scam-checker' ); ?></p></noscript>
     </form>
+
+    <section class="jsc-basic-result" data-jsc-result hidden tabindex="-1" aria-labelledby="jsc-result-title">
+        <div class="jsc-basic-result__summary">
+            <div class="jsc-score" aria-label="<?php esc_attr_e( 'Risk score out of 100', 'job-scam-checker' ); ?>">
+                <strong data-jsc-score>0</strong><span>/100</span>
+            </div>
+            <div>
+                <p class="jsc-basic-result__level" data-jsc-level></p>
+                <h3 id="jsc-result-title" data-jsc-message></h3>
+                <p data-jsc-count></p>
+            </div>
+        </div>
+        <div data-jsc-detections></div>
+        <div data-jsc-domains></div>
+        <p class="jsc-result-disclaimer" data-jsc-disclaimer></p>
+    </section>
 </section>

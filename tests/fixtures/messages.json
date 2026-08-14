@@ -1,0 +1,102 @@
+[
+  {
+    "id": "legitimate-interview",
+    "kind": "legitimate",
+    "max_score": 0,
+    "message": "Thank you for applying through our careers page for the Senior Accountant role. We would like to schedule a 45-minute video interview with the hiring manager next Tuesday. The salary range is $78,000 to $92,000 per year. No documents are needed at this stage."
+  },
+  {
+    "id": "legitimate-remote-equipment",
+    "kind": "legitimate",
+    "max_score": 0,
+    "message": "Following your two interviews, we are pleased to offer the remote developer role. The company will ship a laptop directly to you at no cost. You will never be asked to pay for equipment or purchase equipment from a vendor. Review the offer in our secure HR portal."
+  },
+  {
+    "id": "legitimate-security-warning",
+    "kind": "legitimate",
+    "max_score": 0,
+    "message": "Recruiting security notice: We will never ask you to share your password, send the OTP, buy gift cards, pay an application fee, or send bitcoin. Apply only at https://careers.example.com/openings and contact our published HR number with questions."
+  },
+  {
+    "id": "legitimate-linkedin-recruiter",
+    "kind": "legitimate",
+    "max_score": 0,
+    "message": "Hello Morgan, I saw your public portfolio and LinkedIn experience. I recruit for Example Engineering. If you are interested, here is the public job description on https://jobs.example.org/engineering/42. You may apply there. Our interview process includes a recruiter call and two technical interviews."
+  },
+  {
+    "id": "legitimate-high-annual-salary",
+    "kind": "legitimate",
+    "max_score": 0,
+    "message": "The posted compensation range for this medical director position is $280,000–$340,000 per year, depending on qualifications. Candidates complete a panel interview, credential verification, references, and a background check after conditional offer."
+  },
+  {
+    "id": "task-recharge-telegram",
+    "kind": "scam",
+    "min_score": 75,
+    "required": ["telegram-recruitment", "task-deposit", "recharge-task", "cryptocurrency-request"],
+    "message": "We found your profile for an online job. Contact our hiring manager on Telegram at https://t.me/easywork. Complete simple product optimization tasks and earn $800 per day. Deposit USDT to unlock tasks. If a combination task appears, recharge your account to continue. Act now, limited slots!"
+  },
+  {
+    "id": "fake-check-assistant",
+    "kind": "scam",
+    "min_score": 75,
+    "required": ["fake-check", "gift-card-request", "personal-assistant-purchase"],
+    "message": "You are hired immediately as my personal assistant with no interview required. I will email a check for office equipment. Mobile deposit the check, keep your weekly pay, then buy gift cards for my clients and send gift card codes. Respond immediately."
+  },
+  {
+    "id": "whatsapp-fee-crypto",
+    "kind": "scam",
+    "min_score": 50,
+    "required": ["whatsapp-recruitment", "no-interview", "registration-fee", "cryptocurrency-request"],
+    "message": "WhatsApp recruitment for a work from home position. No interview required and you can start immediately. Pay the registration fee with crypto to activate your employee account. Offer expires today."
+  },
+  {
+    "id": "otp-bank-theft",
+    "kind": "scam",
+    "min_score": 50,
+    "required": ["bank-account-request", "otp-request"],
+    "message": "To set up payroll before your interview, send your bank account details and online banking username. We will trigger verification; share the OTP and send security code immediately so HR can approve you."
+  },
+  {
+    "id": "reshipping",
+    "kind": "scam",
+    "min_score": 25,
+    "required": ["reshipping-job"],
+    "message": "We found your profile. Work as a package inspector from home. Receive packages at your home, inspect them, repackage and reship using labels we provide. You are already hired and can start immediately without interview."
+  },
+  {
+    "id": "money-mule",
+    "kind": "scam",
+    "min_score": 25,
+    "required": ["money-transfer-work"],
+    "message": "Remote financial agent needed. Receive money into your account from clients, keep a percentage and forward the balance to our suppliers. No experience is necessary and earnings are guaranteed."
+  },
+  {
+    "id": "short-link-pressure",
+    "kind": "scam",
+    "min_score": 25,
+    "required": ["shortened-url", "urgency-pressure"],
+    "message": "You have been shortlisted without applying. Complete your employee registration immediately at https://bit.ly/3fakejob. Limited slots and you must reply today."
+  },
+  {
+    "id": "punycode-id-link",
+    "kind": "scam",
+    "min_score": 25,
+    "required": ["punycode-domain", "government-id-request"],
+    "message": "Upload a photo of your passport to our hiring portal at https://xn--exmple-cua.com/onboarding before an interview can be scheduled."
+  },
+  {
+    "id": "mystery-shopper",
+    "kind": "scam",
+    "min_score": 50,
+    "required": ["mystery-shopper-check", "fake-check"],
+    "message": "Selected as a mystery shopper with no interview needed. Deposit the attached check, keep part of the check as pay, use the rest to buy Google Play cards, and evaluate the store. Send the remaining funds today."
+  },
+  {
+    "id": "raw-ip-password",
+    "kind": "scam",
+    "min_score": 25,
+    "required": ["ip-address-link", "password-request"],
+    "message": "Complete hiring at http://192.0.2.4/login and provide your password to synchronize the employment account. Do not contact the company while we process it."
+  }
+]

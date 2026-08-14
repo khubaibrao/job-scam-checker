@@ -14,8 +14,13 @@ class JSC_Plugin {
      * Register plugin integrations.
      */
     public function run() {
+        JSC_Schema::maybe_upgrade();
+
         $public = new JSC_Public();
         $public->register_hooks();
+
+        $rest = new JSC_REST_Controller();
+        $rest->register_hooks();
 
         add_action( 'init', array( $this, 'load_textdomain' ) );
     }

@@ -47,8 +47,10 @@ $markup = $public->render_checker();
 jsc_test( 'checker has an explicit textarea label', false !== strpos( $markup, 'for="jsc-message"' ) );
 jsc_test( 'checker limits message length', false !== strpos( $markup, 'maxlength="12000"' ) );
 jsc_test( 'checker includes the sensitive-data warning', false !== strpos( $markup, 'Avoid pasting passwords' ) );
-jsc_test( 'checker does not submit during Phase 1', false !== strpos( $markup, 'type="button"' ) );
+jsc_test( 'checker submits only through controlled JavaScript', false !== strpos( $markup, 'type="button"' ) );
 jsc_test( 'checker CTA matches approved copy', false !== strpos( $markup, 'CHECK NOW' ) );
+jsc_test( 'checker exposes a same-origin REST endpoint', false !== strpos( $GLOBALS['jsc_test_localized']['JSCCheckerConfig']['endpoint'], '/wp-json/job-scam-checker/v1/analyze' ) );
+jsc_test( 'checker exposes a request nonce', 'valid-test-nonce' === $GLOBALS['jsc_test_localized']['JSCCheckerConfig']['nonce'] );
 
 echo "\n{$tests} tests, {$failed} failures.\n";
 exit( $failed > 0 ? 1 : 0 );

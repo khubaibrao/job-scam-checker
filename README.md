@@ -12,17 +12,17 @@ dependency.
 - `tests` — dependency-free Phase 1 smoke and integration tests
 - `docs` — architecture and Hostinger deployment notes
 
-## Phase 1 preview
+## Working checker
 
 Install and activate the plugin and theme in WordPress. Plugin activation creates
-the Home and Job Scam Checker pages if they do not exist and assigns the homepage.
-The checker form is an interface shell in Phase 1; analysis is intentionally
-reserved for Phase 2.
+the Home and Job Scam Checker pages if they do not exist, assigns the homepage,
+and seeds the local rule library. The checker performs private, same-origin PHP
+analysis with no AI or external service.
 
 ## Tests
 
 ```bash
-php tests/php/run.php
+bash tools/test-all.sh
 ```
 
 See `docs/deployment-hostinger.md` for installation details.
