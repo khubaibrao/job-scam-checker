@@ -1,0 +1,119 @@
+.jsc-checker {
+  background: #fff;
+  border: 1px solid #dbe5e8;
+  border-radius: 1rem;
+  box-shadow: 0 1.25rem 3rem rgba(15, 48, 55, 0.1);
+  color: #17363d;
+  margin-inline: auto;
+  max-width: 52rem;
+  padding: clamp(1.25rem, 4vw, 2.5rem);
+}
+
+.jsc-checker h2 {
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  margin: 0.25rem 0 0.5rem;
+}
+
+.jsc-checker__heading > p:last-child {
+  color: #4b646a;
+  margin: 0 0 1.5rem;
+}
+
+.jsc-eyebrow {
+  color: #087b6f;
+  font-size: 0.8rem;
+  font-weight: 750;
+  letter-spacing: 0.08em;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.jsc-checker label {
+  display: block;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.jsc-checker textarea {
+  background: #fbfdfd;
+  border: 2px solid #aabcc0;
+  border-radius: 0.625rem;
+  color: #132f35;
+  display: block;
+  font: inherit;
+  line-height: 1.55;
+  min-height: 13rem;
+  padding: 1rem;
+  resize: vertical;
+  width: 100%;
+}
+
+.jsc-checker textarea:focus {
+  border-color: #087b6f;
+  box-shadow: 0 0 0 3px rgba(8, 123, 111, 0.2);
+  outline: 0;
+}
+
+.jsc-checker__meta {
+  align-items: flex-start;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+  margin: 0.75rem 0 1.25rem;
+}
+
+.jsc-privacy-warning {
+  color: #4b646a;
+  font-size: 0.875rem;
+  margin: 0;
+  max-width: 40rem;
+}
+
+.jsc-character-count {
+  color: #597178;
+  flex: 0 0 auto;
+  font-size: 0.8rem;
+  margin: 0;
+}
+
+.jsc-button {
+  background: #087b6f;
+  border: 0;
+  border-radius: 0.625rem;
+  color: #fff;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 800;
+  letter-spacing: 0.025em;
+  min-height: 3.25rem;
+  padding: 0.8rem 1.75rem;
+  width: 100%;
+}
+
+.jsc-button:hover {
+  background: #05645b;
+}
+
+.jsc-button:focus-visible {
+  box-shadow: 0 0 0 4px rgba(8, 123, 111, 0.28);
+  outline: 3px solid #fff;
+  outline-offset: -5px;
+}
+
+.jsc-phase-notice {
+  background: #eef8f6;
+  border-left: 4px solid #087b6f;
+  margin: 1rem 0 0;
+  padding: 0.875rem 1rem;
+}
+
+@media (max-width: 37.5rem) {
+  .jsc-checker__meta {
+    display: block;
+  }
+
+  .jsc-character-count {
+    margin-top: 0.5rem;
+    text-align: right;
+  }
+}
