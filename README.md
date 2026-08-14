@@ -19,6 +19,10 @@ the Home and Job Scam Checker pages if they do not exist, assigns the homepage,
 and seeds the local rule library. The checker performs private, same-origin PHP
 analysis with no AI or external service.
 
+Results provide an accessible score and risk level, detailed warning explanations,
+safe domain findings, and practical next steps. See
+`docs/phase3-results-experience.md` for the presentation and privacy contract.
+
 ## Tests
 
 ```bash

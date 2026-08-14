@@ -85,7 +85,7 @@ class JSC_Risk_Calculator {
             return array( 'key' => 'high', 'label' => __( 'High Risk', 'job-scam-checker' ), 'message' => __( 'High-risk scam indicators detected.', 'job-scam-checker' ) );
         }
         if ( $score >= 25 ) {
-            return array( 'key' => 'some', 'label' => __( 'Some Warning Signs', 'job-scam-checker' ), 'message' => __( 'Potential warning signs detected.', 'job-scam-checker' ) );
+            return array( 'key' => 'caution', 'label' => __( 'Caution', 'job-scam-checker' ), 'message' => __( 'Potential warning signs detected.', 'job-scam-checker' ) );
         }
         return array( 'key' => 'low', 'label' => __( 'Low Risk Indicators', 'job-scam-checker' ), 'message' => __( 'Few common scam indicators were detected. Verify independently before proceeding.', 'job-scam-checker' ) );
     }

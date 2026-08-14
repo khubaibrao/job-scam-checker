@@ -6,7 +6,7 @@
 define( 'ABSPATH', dirname( __DIR__, 2 ) . '/' );
 define( 'OBJECT', 'OBJECT' );
 define( 'ARRAY_A', 'ARRAY_A' );
-define( 'JSC_VERSION', '0.2.0' );
+define( 'JSC_VERSION', '0.3.0' );
 define( 'JSC_DB_VERSION', '1.0.0' );
 define( 'JSC_PLUGIN_DIR', dirname( __DIR__, 2 ) . '/wordpress/plugins/job-scam-checker/' );
 define( 'JSC_PLUGIN_URL', 'https://example.test/wp-content/plugins/job-scam-checker/' );
@@ -47,6 +47,7 @@ class WP_REST_Response {
 function __( $text ) { return $text; }
 function esc_html__( $text ) { return htmlspecialchars( $text, ENT_QUOTES, 'UTF-8' ); }
 function esc_attr__( $text ) { return htmlspecialchars( $text, ENT_QUOTES, 'UTF-8' ); }
+function esc_attr( $text ) { return htmlspecialchars( $text, ENT_QUOTES, 'UTF-8' ); }
 function esc_html_e( $text ) { echo esc_html__( $text ); }
 function esc_attr_e( $text ) { echo esc_attr__( $text ); }
 function esc_url_raw( $url ) { return filter_var( 0 === strpos( $url, 'www.' ) ? 'https://' . $url : $url, FILTER_SANITIZE_URL ); }
@@ -110,6 +111,7 @@ require_once JSC_PLUGIN_DIR . 'includes/class-jsc-content-installer.php';
 require_once JSC_PLUGIN_DIR . 'includes/class-jsc-rule-repository.php';
 require_once JSC_PLUGIN_DIR . 'includes/class-jsc-link-analyzer.php';
 require_once JSC_PLUGIN_DIR . 'includes/class-jsc-risk-calculator.php';
+require_once JSC_PLUGIN_DIR . 'includes/class-jsc-recommendation-provider.php';
 require_once JSC_PLUGIN_DIR . 'includes/class-jsc-rule-engine.php';
 require_once JSC_PLUGIN_DIR . 'includes/class-jsc-rate-limiter.php';
 require_once JSC_PLUGIN_DIR . 'public/class-jsc-public.php';

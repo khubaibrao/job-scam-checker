@@ -16,9 +16,13 @@ class JSC_Rule_Engine {
     /** @var JSC_Risk_Calculator */
     private $calculator;
 
-    public function __construct( JSC_Link_Analyzer $link_analyzer = null, JSC_Risk_Calculator $calculator = null ) {
-        $this->link_analyzer = $link_analyzer ?: new JSC_Link_Analyzer();
-        $this->calculator    = $calculator ?: new JSC_Risk_Calculator();
+    /** @var JSC_Recommendation_Provider */
+    private $recommendation_provider;
+
+    public function __construct( JSC_Link_Analyzer $link_analyzer = null, JSC_Risk_Calculator $calculator = null, JSC_Recommendation_Provider $recommendation_provider = null ) {
+        $this->link_analyzer            = $link_analyzer ?: new JSC_Link_Analyzer();
+        $this->calculator               = $calculator ?: new JSC_Risk_Calculator();
+        $this->recommendation_provider  = $recommendation_provider ?: new JSC_Recommendation_Provider();
     }
 
     /**
@@ -56,6 +60,7 @@ class JSC_Rule_Engine {
         $result                    = $this->calculator->calculate( $matches );
         $result['warning_count']   = count( $result['detections'] );
         $result['suspicious_links'] = $this->public_link_findings( $links );
+        $result['actions']         = $this->recommendation_provider->for_result( $result['detections'], $result['score'] );
         $result['disclaimer']      = __( 'This automated check cannot confirm whether an offer is legitimate or fraudulent. Verify independently before proceeding.', 'job-scam-checker' );
 
         return $result;
@@ -200,8 +205,35 @@ class JSC_Rule_Engine {
                 'suspicious_tld' => $link['suspicious_tld'],
                 'punycode'       => $link['punycode'],
                 'ip_address'     => $link['ip_address'],
+                'reasons'        => $this->link_reasons( $link ),
             );
         }
         return $findings;
+    }
+
+    /**
+     * @return array<int,string>
+     */
+    private function link_reasons( array $link ) {
+        $reasons = array();
+        if ( $link['shortened'] ) {
+            $reasons[] = __( 'Shortened link hides its final destination', 'job-scam-checker' );
+        }
+        if ( $link['messaging'] ) {
+            $reasons[] = __( 'Opens a messaging account or channel', 'job-scam-checker' );
+        }
+        if ( $link['free_hosting'] ) {
+            $reasons[] = __( 'Uses a free website-hosting domain', 'job-scam-checker' );
+        }
+        if ( $link['suspicious_tld'] ) {
+            $reasons[] = __( 'Uses an unusual domain ending', 'job-scam-checker' );
+        }
+        if ( $link['punycode'] ) {
+            $reasons[] = __( 'Encoded domain may imitate another name', 'job-scam-checker' );
+        }
+        if ( $link['ip_address'] ) {
+            $reasons[] = __( 'Uses a raw IP address instead of a company domain', 'job-scam-checker' );
+        }
+        return $reasons;
     }
 }

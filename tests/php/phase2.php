@@ -58,7 +58,7 @@ $html = $engine->analyze( '<script>alert(1)</script> Send your password', $rules
 jsc_phase2_test( 'analysis output does not contain pasted script markup', false === strpos( json_encode( $html ), '<script>' ) );
 
 jsc_phase2_test( 'risk 0 maps to low', 'low' === JSC_Risk_Calculator::level_for_score( 0 )['key'] );
-jsc_phase2_test( 'risk 25 maps to some', 'some' === JSC_Risk_Calculator::level_for_score( 25 )['key'] );
+jsc_phase2_test( 'risk 25 maps to caution', 'caution' === JSC_Risk_Calculator::level_for_score( 25 )['key'] );
 jsc_phase2_test( 'risk 50 maps to high', 'high' === JSC_Risk_Calculator::level_for_score( 50 )['key'] );
 jsc_phase2_test( 'risk 75 maps to very high', 'very_high' === JSC_Risk_Calculator::level_for_score( 75 )['key'] );
 

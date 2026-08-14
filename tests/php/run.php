@@ -44,7 +44,7 @@ jsc_test( 'checker stylesheet is local', 0 === strpos( $GLOBALS['jsc_test_styles
 jsc_test( 'checker script is local', 0 === strpos( $GLOBALS['jsc_test_scripts']['jsc-checker'], JSC_PLUGIN_URL ) );
 
 $markup = $public->render_checker();
-jsc_test( 'checker has an explicit textarea label', false !== strpos( $markup, 'for="jsc-message"' ) );
+jsc_test( 'checker has an explicit textarea label', (bool) preg_match( '/<label for="([^"]+-message)"/', $markup ) );
 jsc_test( 'checker limits message length', false !== strpos( $markup, 'maxlength="12000"' ) );
 jsc_test( 'checker includes the sensitive-data warning', false !== strpos( $markup, 'Avoid pasting passwords' ) );
 jsc_test( 'checker submits only through controlled JavaScript', false !== strpos( $markup, 'type="button"' ) );

@@ -43,6 +43,10 @@ class JSC_Public {
      * @return string
      */
     public function render_checker() {
+        static $instance = 0;
+        ++$instance;
+        $instance_id = 'jsc-checker-' . $instance;
+
         wp_enqueue_style( 'jsc-checker' );
         wp_enqueue_script( 'jsc-checker' );
         wp_localize_script(
@@ -55,9 +59,16 @@ class JSC_Public {
                     'checking'       => __( 'Checking message…', 'job-scam-checker' ),
                     'error'          => __( 'The message could not be checked. Please try again.', 'job-scam-checker' ),
                     'warningSigns'   => __( 'Warning signs detected', 'job-scam-checker' ),
-                    'domains'        => __( 'Links or domains to examine carefully', 'job-scam-checker' ),
+                    'whyItMatters'   => __( 'Why it matters', 'job-scam-checker' ),
+                    'whatToDo'       => __( 'What to do', 'job-scam-checker' ),
+                    'recommended'    => __( 'Recommended next steps', 'job-scam-checker' ),
+                    'domains'        => __( 'Links and domains to examine carefully', 'job-scam-checker' ),
                     'noWarnings'     => __( 'No common warning signs were detected by the current rules.', 'job-scam-checker' ),
                     'verify'         => __( 'Always verify the recruiter and company independently before proceeding.', 'job-scam-checker' ),
+                    'warningSingular'=> __( 'warning sign detected', 'job-scam-checker' ),
+                    'warningPlural'  => __( 'warning signs detected', 'job-scam-checker' ),
+                    'resultReady'    => __( 'Analysis complete.', 'job-scam-checker' ),
+                    'configuration'  => __( 'Checker configuration is unavailable. Refresh the page and try again.', 'job-scam-checker' ),
                 ),
             )
         );

@@ -1,23 +1,8 @@
 (function () {
   'use strict';
 
-  var form = document.querySelector('[data-jsc-checker-form]');
-  if (!form) {
-    return;
-  }
-
-  var textarea = form.querySelector('textarea');
-  var counter = form.querySelector('[data-jsc-character-count]');
-  var checkButton = form.querySelector('[data-jsc-check-button]');
-  var status = form.querySelector('[data-jsc-status]');
-  var result = form.closest('.jsc-checker').querySelector('[data-jsc-result]');
   var config = window.JSCCheckerConfig;
 
-  function updateCount() {
-    counter.textContent = String(textarea.value.length);
-  }
-
-  textarea.addEventListener('input', updateCount);
   function addTextElement(parent, tag, className, text) {
     var element = document.createElement(tag);
     if (className) {
@@ -28,90 +13,224 @@
     return element;
   }
 
-  function renderResult(data) {
-    result.className = 'jsc-basic-result jsc-basic-result--' + data.level.key;
-    result.querySelector('[data-jsc-score]').textContent = String(data.score);
-    result.querySelector('[data-jsc-level]').textContent = data.level.label;
-    result.querySelector('[data-jsc-message]').textContent = data.level.message;
-    result.querySelector('[data-jsc-count]').textContent = data.warning_count + ' ' + config.labels.warningSigns.toLowerCase() + '.';
-    result.querySelector('[data-jsc-disclaimer]').textContent = data.disclaimer;
+  function isValidResult(data) {
+    return data && Number.isInteger(data.score) && data.score >= 0 && data.score <= 100 &&
+      data.level && typeof data.level.key === 'string' && typeof data.level.label === 'string' &&
+      Array.isArray(data.detections) && Array.isArray(data.suspicious_links) && Array.isArray(data.actions);
+  }
 
-    var detections = result.querySelector('[data-jsc-detections]');
-    detections.replaceChildren();
-    if (data.detections.length) {
-      addTextElement(detections, 'h4', '', config.labels.warningSigns);
-      var list = document.createElement('ul');
+  function scrollOptions(block) {
+    var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    return { behavior: reduceMotion ? 'auto' : 'smooth', block: block };
+  }
+
+  function initChecker(form) {
+    var root = form.closest('.jsc-checker');
+    var textarea = form.querySelector('textarea');
+    var counter = form.querySelector('[data-jsc-character-count]');
+    var checkButton = form.querySelector('[data-jsc-check-button]');
+    var status = form.querySelector('[data-jsc-status]');
+    var result = root.querySelector('[data-jsc-result]');
+    var errorPanel = root.querySelector('[data-jsc-error]');
+    var errorText = root.querySelector('[data-jsc-error-message]');
+    var retryButton = root.querySelector('[data-jsc-retry]');
+    var resetButton = root.querySelector('[data-jsc-reset]');
+    var printButton = root.querySelector('[data-jsc-print]');
+
+    function updateCount() {
+      counter.textContent = String(textarea.value.length);
+    }
+
+    function setBusy(isBusy) {
+      checkButton.disabled = isBusy;
+      form.setAttribute('aria-busy', String(isBusy));
+      if (isBusy) {
+        checkButton.setAttribute('aria-busy', 'true');
+      } else {
+        checkButton.removeAttribute('aria-busy');
+      }
+    }
+
+    function showError(message) {
+      result.hidden = true;
+      errorText.textContent = message;
+      errorPanel.hidden = false;
+      status.textContent = '';
+      errorPanel.focus({ preventScroll: true });
+      errorPanel.scrollIntoView(scrollOptions('nearest'));
+    }
+
+    function renderDetections(data) {
+      var container = result.querySelector('[data-jsc-detections]');
+      container.replaceChildren();
+      addTextElement(container, 'h4', 'jsc-section-title', config.labels.warningSigns);
+
+      if (!data.detections.length) {
+        addTextElement(container, 'p', 'jsc-no-warnings', config.labels.noWarnings);
+        return;
+      }
+
+      var list = document.createElement('ol');
       list.className = 'jsc-detection-list';
       data.detections.forEach(function (detection) {
         var item = document.createElement('li');
-        addTextElement(item, 'strong', '', detection.name);
-        addTextElement(item, 'p', '', detection.explanation);
+        item.className = 'jsc-detection-card';
+        var heading = document.createElement('h5');
+        var icon = addTextElement(heading, 'span', 'jsc-detection-card__icon', '!');
+        icon.setAttribute('aria-hidden', 'true');
+        heading.appendChild(document.createTextNode(detection.name));
+        item.appendChild(heading);
+
+        var details = document.createElement('dl');
+        var whyTerm = addTextElement(details, 'dt', '', config.labels.whyItMatters);
+        addTextElement(details, 'dd', '', detection.explanation);
+        var actionTerm = addTextElement(details, 'dt', '', config.labels.whatToDo);
+        addTextElement(details, 'dd', '', detection.recommendation);
+        whyTerm.className = 'jsc-detail-label';
+        actionTerm.className = 'jsc-detail-label';
+        item.appendChild(details);
         list.appendChild(item);
       });
-      detections.appendChild(list);
-    } else {
-      addTextElement(detections, 'p', 'jsc-no-warnings', config.labels.noWarnings);
+      container.appendChild(list);
     }
 
-    var domains = result.querySelector('[data-jsc-domains]');
-    domains.replaceChildren();
-    if (data.suspicious_links.length) {
-      addTextElement(domains, 'h4', '', config.labels.domains);
-      var domainList = document.createElement('ul');
+    function renderDomains(data) {
+      var container = result.querySelector('[data-jsc-domains]');
+      container.replaceChildren();
+      container.hidden = !data.suspicious_links.length;
+      if (!data.suspicious_links.length) {
+        return;
+      }
+
+      addTextElement(container, 'h4', 'jsc-section-title', config.labels.domains);
+      addTextElement(container, 'p', 'jsc-section-intro', 'These domains are shown as plain text for safety. Do not copy or open them until you verify the employer independently.');
+      var list = document.createElement('ul');
+      list.className = 'jsc-domain-list';
       data.suspicious_links.forEach(function (link) {
-        addTextElement(domainList, 'li', '', link.domain);
+        var item = document.createElement('li');
+        var domain = addTextElement(item, 'code', 'jsc-domain-name', link.domain);
+        domain.setAttribute('dir', 'ltr');
+        var reasons = document.createElement('ul');
+        reasons.className = 'jsc-domain-reasons';
+        link.reasons.forEach(function (reason) {
+          addTextElement(reasons, 'li', '', reason);
+        });
+        item.appendChild(reasons);
+        list.appendChild(item);
       });
-      domains.appendChild(domainList);
+      container.appendChild(list);
     }
 
-    result.hidden = false;
-    result.focus();
-  }
-
-  function errorMessage(payload) {
-    if (payload && payload.message) {
-      return payload.message;
-    }
-    return config.labels.error;
-  }
-
-  checkButton.addEventListener('click', function () {
-    if (!textarea.reportValidity()) {
-      return;
-    }
-    if (!config || !config.endpoint || !config.nonce) {
-      status.textContent = 'Checker configuration is unavailable. Refresh the page and try again.';
-      return;
+    function renderActions(data) {
+      var container = result.querySelector('[data-jsc-actions]');
+      container.replaceChildren();
+      addTextElement(container, 'h4', 'jsc-section-title', config.labels.recommended);
+      var list = document.createElement('ul');
+      list.className = 'jsc-action-list';
+      data.actions.forEach(function (action) {
+        var item = document.createElement('li');
+        addTextElement(item, 'strong', '', action.title);
+        addTextElement(item, 'p', '', action.description);
+        list.appendChild(item);
+      });
+      container.appendChild(list);
     }
 
-    checkButton.disabled = true;
-    checkButton.setAttribute('aria-busy', 'true');
-    status.textContent = config.labels.checking;
-    result.hidden = true;
+    function renderResult(data) {
+      var countLabel = data.warning_count === 1 ? config.labels.warningSingular : config.labels.warningPlural;
+      result.className = 'jsc-result jsc-result--' + data.level.key;
+      result.querySelector('[data-jsc-score]').textContent = String(data.score);
+      result.querySelector('[data-jsc-progress]').value = data.score;
+      result.querySelector('[data-jsc-progress]').textContent = data.score + ' out of 100';
+      result.querySelector('[data-jsc-progress]').setAttribute('aria-valuetext', data.score + ' out of 100, ' + data.level.label);
+      result.querySelector('[data-jsc-level]').textContent = data.level.label;
+      result.querySelector('[data-jsc-message]').textContent = data.level.message;
+      result.querySelector('[data-jsc-count]').textContent = data.warning_count + ' ' + countLabel + '.';
+      result.querySelector('[data-jsc-disclaimer]').textContent = data.disclaimer;
+      result.style.setProperty('--jsc-score', String(data.score));
 
-    fetch(config.endpoint, {
-      method: 'POST',
-      credentials: 'same-origin',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-JSC-Nonce': config.nonce
-      },
-      body: JSON.stringify({ message: textarea.value })
-    }).then(function (response) {
-      return response.json().then(function (payload) {
+      renderDetections(data);
+      renderDomains(data);
+      renderActions(data);
+
+      errorPanel.hidden = true;
+      result.hidden = false;
+      status.textContent = config.labels.resultReady + ' ' + data.level.label + ', score ' + data.score + ' out of 100, ' + data.warning_count + ' ' + countLabel + '.';
+      result.focus({ preventScroll: true });
+      result.scrollIntoView(scrollOptions('start'));
+    }
+
+    function parseResponse(response) {
+      return response.text().then(function (body) {
+        var payload;
+        try {
+          payload = JSON.parse(body);
+        } catch (ignore) {
+          throw new Error(config.labels.error);
+        }
         if (!response.ok) {
-          throw new Error(errorMessage(payload));
+          throw new Error(payload && payload.message ? payload.message : config.labels.error);
+        }
+        if (!isValidResult(payload)) {
+          throw new Error(config.labels.error);
         }
         return payload;
       });
-    }).then(function (data) {
-      status.textContent = config.labels.verify;
-      renderResult(data);
-    }).catch(function (error) {
-      status.textContent = error.message || config.labels.error;
-    }).finally(function () {
-      checkButton.disabled = false;
-      checkButton.removeAttribute('aria-busy');
+    }
+
+    function runCheck() {
+      if (!textarea.reportValidity()) {
+        return;
+      }
+      if (!config || !config.endpoint || !config.nonce) {
+        showError(config && config.labels ? config.labels.configuration : 'Checker configuration is unavailable. Refresh the page and try again.');
+        return;
+      }
+
+      setBusy(true);
+      errorPanel.hidden = true;
+      result.hidden = true;
+      status.textContent = config.labels.checking;
+
+      var controller = typeof AbortController === 'function' ? new AbortController() : null;
+      var timeout = controller ? window.setTimeout(function () { controller.abort(); }, 20000) : null;
+      var requestOptions = {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-JSC-Nonce': config.nonce
+        },
+        body: JSON.stringify({ message: textarea.value })
+      };
+      if (controller) {
+        requestOptions.signal = controller.signal;
+      }
+
+      fetch(config.endpoint, requestOptions).then(parseResponse).then(renderResult).catch(function (error) {
+        showError(error.message || config.labels.error);
+      }).finally(function () {
+        if (timeout) {
+          window.clearTimeout(timeout);
+        }
+        setBusy(false);
+      });
+    }
+
+    textarea.addEventListener('input', updateCount);
+    checkButton.addEventListener('click', runCheck);
+    retryButton.addEventListener('click', runCheck);
+    printButton.addEventListener('click', function () { window.print(); });
+    resetButton.addEventListener('click', function () {
+      result.hidden = true;
+      errorPanel.hidden = true;
+      textarea.value = '';
+      updateCount();
+      status.textContent = '';
+      textarea.focus();
+      textarea.scrollIntoView(scrollOptions('center'));
     });
-  });
+  }
+
+  document.querySelectorAll('[data-jsc-checker-form]').forEach(initChecker);
 }());

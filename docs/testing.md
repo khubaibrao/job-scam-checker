@@ -16,6 +16,12 @@ thresholds, overlap and repetition protection, URL/domain classification,
 security-warning false positives, XSS-oriented output checks, rate limiting,
 schema assertions, nonce rejection, and request-size rejection.
 
+Phase 3 tests Low, Caution, High, and Very High result contracts; contextual and
+universal safety actions; suspicious-domain reasons; probabilistic wording;
+accessible relationships, announcements, progress, and alerts; no-JavaScript and
+malformed-response handling; DOM-safe rendering; phone/mobile breakpoints; print
+rules; and the empty hidden advertising integration target.
+
 After deployment to a WordPress staging site, manually verify:
 
 - Plugin and theme activation with debug logging enabled
