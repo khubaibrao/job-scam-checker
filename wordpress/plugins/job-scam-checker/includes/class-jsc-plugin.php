@@ -23,6 +23,13 @@ class JSC_Plugin {
         $rest = new JSC_REST_Controller();
         $rest->register_hooks();
 
+        $settings = new JSC_Settings();
+        $settings->register_hooks();
+
+        if ( ! wp_next_scheduled( 'jsc_daily_cleanup' ) ) {
+            wp_schedule_event( time() + DAY_IN_SECONDS, 'daily', 'jsc_daily_cleanup' );
+        }
+
         add_action( 'init', array( $this, 'load_textdomain' ) );
     }
 

@@ -128,6 +128,20 @@
   min-height: 1.65em;
 }
 
+.jsc-follow-up {
+  background: #f4faf8;
+  border-top: 1px solid #dbe5e8;
+  margin: 1.5rem clamp(1.25rem, 4vw, 2rem) 0;
+  padding: 1.25rem;
+}
+
+.jsc-follow-up h4 { margin: 0 0 0.4rem; }
+.jsc-follow-up > p { color: #4b646a; }
+.jsc-follow-up select { background: #fff; border: 1px solid #82999e; border-radius: 0.35rem; font: inherit; margin: 0 0 1rem; max-width: 22rem; padding: 0.55rem; width: 100%; }
+.jsc-follow-up fieldset { border: 0; margin: 0 0 1rem; padding: 0; }
+.jsc-follow-up fieldset label { display: inline-block; font-weight: 400; margin: 0.5rem 1.5rem 0 0; }
+.jsc-follow-up [role="status"] { min-height: 1.5em; }
+
 .jsc-result {
   --jsc-accent: #087b6f;
   --jsc-accent-soft: #e8f6f3;

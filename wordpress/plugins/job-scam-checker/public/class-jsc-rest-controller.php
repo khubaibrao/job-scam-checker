@@ -30,6 +30,15 @@ class JSC_REST_Controller {
                 'permission_callback' => '__return_true',
             )
         );
+        register_rest_route(
+            'job-scam-checker/v1',
+            '/follow-up',
+            array(
+                'methods'             => WP_REST_Server::CREATABLE,
+                'callback'            => array( $this, 'follow_up' ),
+                'permission_callback' => '__return_true',
+            )
+        );
     }
 
     /**
@@ -74,7 +83,25 @@ class JSC_REST_Controller {
         $result     = $engine->analyze( $message, $repository->get_enabled_rules() );
 
         unset( $message );
+        $result['collection_token'] = ( new JSC_Statistics() )->record_analysis( $result );
         nocache_headers();
         return new WP_REST_Response( $result, 200 );
+    }
+
+    /** Accept a validated, one-use aggregate-only follow-up response. */
+    public function follow_up( $request ) {
+        $nonce = $request->get_header( 'X-JSC-Nonce' );
+        if ( ! $nonce || ! wp_verify_nonce( $nonce, 'jsc_analyze_message' ) ) {
+            return new WP_Error( 'jsc_invalid_nonce', __( 'Security check failed. Refresh the page and try again.', 'job-scam-checker' ), array( 'status' => 403 ) );
+        }
+        $result = ( new JSC_Statistics() )->record_follow_up(
+            $request->get_param( 'token' ),
+            $request->get_param( 'channel' ),
+            $request->get_param( 'money_requested' ),
+            $request->get_param( 'payment_purpose' )
+        );
+        if ( is_wp_error( $result ) ) { return $result; }
+        nocache_headers();
+        return new WP_REST_Response( array( 'recorded' => true ), 200 );
     }
 }

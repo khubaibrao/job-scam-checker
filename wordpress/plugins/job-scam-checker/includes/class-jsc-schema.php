@@ -42,6 +42,17 @@ class JSC_Schema {
         require_once ABSPATH . 'wp-admin/includes/upgrade.php';
         dbDelta( $sql );
 
+        $stats_table = $wpdb->prefix . 'jsc_daily_stats';
+        $stats_sql   = "CREATE TABLE {$stats_table} (
+            stat_date date NOT NULL,
+            metric varchar(32) NOT NULL,
+            stat_key varchar(100) NOT NULL,
+            stat_count bigint(20) unsigned NOT NULL DEFAULT 0,
+            PRIMARY KEY  (stat_date, metric, stat_key),
+            KEY metric_date (metric, stat_date)
+        ) {$charset_collate};";
+        dbDelta( $stats_sql );
+
         self::seed_default_rules();
         update_option( 'jsc_db_version', JSC_DB_VERSION, false );
     }

@@ -44,6 +44,7 @@
             );
             ?>
         </nav>
+        <details class="header-search"><summary><?php esc_html_e( 'Search', 'job-scam-checker-theme' ); ?></summary><div><?php get_search_form(); ?></div></details>
     </div>
 </header>
 <?php

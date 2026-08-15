@@ -96,9 +96,7 @@ class JSC_Content_Installer {
         return $page_ids;
     }
 
-    /**
-     * Upgrade only the exact untouched Phase 1 checker shell.
-     */
+    /** Upgrade only explicitly listed, exact untouched managed content. */
     private static function upgrade_foundation_content( $page, array $definition ) {
         if ( empty( $definition['upgrade_from'] ) || ! isset( $page->post_content ) || ! in_array( $page->post_content, $definition['upgrade_from'], true ) ) {
             return;

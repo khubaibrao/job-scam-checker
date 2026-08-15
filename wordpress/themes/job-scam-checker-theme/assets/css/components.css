@@ -396,6 +396,27 @@
   padding: 2rem;
 }
 
+.header-search { margin-left: 1.25rem; position: relative; }
+.header-search summary { color: var(--color-teal); cursor: pointer; font-size: 0.9rem; font-weight: 800; }
+.header-search > div { background: #fff; border: 1px solid var(--color-line); border-radius: var(--radius); box-shadow: 0 0.75rem 2rem rgba(15, 48, 55, 0.14); min-width: min(28rem, 90vw); padding: 1rem; position: absolute; right: 0; top: 2rem; }
+.header-search .site-search-form { margin: 0; }
+.homepage-trends { background: #fff; padding-block: clamp(3rem, 7vw, 5rem); }
+.jsc-trends { border: 1px solid var(--color-line); border-radius: var(--radius); padding: clamp(1.25rem, 4vw, 2rem); }
+.jsc-trends h2 { margin: 0.4rem 0 0.75rem; }
+.jsc-trends__empty { color: var(--color-ink-soft); }
+.site-search-form { margin: 1.5rem 0; }
+.site-search-form label { display: block; font-weight: 700; margin-bottom: 0.4rem; }
+.site-search-form div { display: flex; max-width: 42rem; }
+.site-search-form input { border: 2px solid #91a5aa; border-radius: 0.4rem 0 0 0.4rem; flex: 1; font: inherit; min-width: 0; padding: 0.75rem; }
+.site-search-form button { background: var(--color-teal); border: 0; border-radius: 0 0.4rem 0.4rem 0; color: #fff; font: inherit; font-weight: 800; padding: 0.75rem 1rem; }
+.search-filters { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 1.5rem 0 2rem; }
+.search-filters a { border: 1px solid var(--color-line); border-radius: 99px; padding: 0.4rem 0.8rem; text-decoration: none; }
+.search-filters a[aria-current="page"] { background: var(--color-teal); color: #fff; }
+.search-results-list { display: grid; gap: 1rem; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.search-result-card { border: 1px solid var(--color-line); border-radius: var(--radius); padding: 1.25rem; }
+.search-result-card h2 { font-size: 1.25rem; margin: 0.3rem 0 0.5rem; }
+.search-result-card__type { color: var(--color-teal); font-size: 0.75rem; font-weight: 800; margin: 0; text-transform: uppercase; }
+
 @media (max-width: 56rem) {
   .hero__inner {
     grid-template-columns: 1fr;
@@ -452,6 +473,9 @@
   .related-content__grid {
     grid-template-columns: 1fr;
   }
+
+  .search-results-list { grid-template-columns: 1fr; }
+  .header-search { margin-left: auto; margin-right: 0.75rem; }
 
   .site-footer__bottom {
     display: block;

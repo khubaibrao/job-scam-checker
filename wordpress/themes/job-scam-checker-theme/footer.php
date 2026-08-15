@@ -31,6 +31,7 @@
         <p>&copy; <?php echo esc_html( wp_date( 'Y' ) ); ?> <?php bloginfo( 'name' ); ?>.</p>
         <p><?php esc_html_e( 'This tool provides general guidance, not a guarantee that an offer is legitimate or fraudulent.', 'job-scam-checker-theme' ); ?></p>
     </div>
+    <div class="site-container site-footer__search"><?php get_search_form(); ?></div>
 </footer>
 <?php wp_footer(); ?>
 </body>

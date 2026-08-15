@@ -29,6 +29,13 @@ and safety sections, pairwise content similarity, empty ad targets, robots and
 sitemap integration, permitted schema types, visible breadcrumbs, accurate
 privacy claims, hub completeness, and absence of rating/review claims.
 
+Phase 5 validates enabled and disabled collection, absence of pasted-message
+retention, total/risk/rule/channel/money/payment-purpose aggregation, one-use
+duplicate protection, invalid follow-up rejection, honest trend thresholds and
+empty states, bounded privacy settings, aggregate table keys, native page search,
+curated excerpts, allow-listed filters, no-results guidance, and the Privacy
+Policy upgrade contract.
+
 After deployment to a WordPress staging site, manually verify:
 
 - Plugin and theme activation with debug logging enabled
@@ -39,3 +46,7 @@ After deployment to a WordPress staging site, manually verify:
 - Home/checker page creation and repeat activation
 - Permalinks, page title, description, and Open Graph tags
 - Theme behavior when the plugin is inactive
+- Anonymous-statistics and follow-up toggles under Settings → Job Scam Checker
+- Trend empty state before two real-data periods meet the sample thresholds
+- Search queries, content filters, pagination and no-results checker link
+- Daily aggregate retention cleanup through WordPress cron

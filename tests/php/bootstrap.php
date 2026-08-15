@@ -6,9 +6,9 @@
 define( 'ABSPATH', dirname( __DIR__, 2 ) . '/' );
 define( 'OBJECT', 'OBJECT' );
 define( 'ARRAY_A', 'ARRAY_A' );
-define( 'JSC_VERSION', '0.4.0' );
-define( 'JSC_DB_VERSION', '1.0.0' );
-define( 'JSC_CONTENT_VERSION', '4.0.0' );
+define( 'JSC_VERSION', '0.5.0' );
+define( 'JSC_DB_VERSION', '2.0.0' );
+define( 'JSC_CONTENT_VERSION', '5.0.0' );
 define( 'JSC_PLUGIN_DIR', dirname( __DIR__, 2 ) . '/wordpress/plugins/job-scam-checker/' );
 define( 'JSC_PLUGIN_URL', 'https://example.test/wp-content/plugins/job-scam-checker/' );
 
@@ -73,6 +73,9 @@ function nocache_headers() {}
 function get_option( $name, $default = false ) { return $GLOBALS['jsc_test_options'][ $name ] ?? $default; }
 function get_transient( $key ) { return $GLOBALS['jsc_test_transients'][ $key ] ?? false; }
 function set_transient( $key, $value ) { $GLOBALS['jsc_test_transients'][ $key ] = $value; return true; }
+function delete_transient( $key ) { unset( $GLOBALS['jsc_test_transients'][ $key ] ); return true; }
+function wp_generate_password( $length ) { return str_repeat( 't', $length ); }
+function current_time( $format ) { return 'Y-m-d' === $format ? '2026-08-15' : gmdate( $format ); }
 function is_wp_error( $value ) { return $value instanceof WP_Error; }
 function add_action() {}
 function shortcode_atts( $defaults, $attributes ) { return array_merge( $defaults, $attributes ); }
@@ -142,6 +145,10 @@ function update_option( $name, $value ) {
 }
 
 require_once JSC_PLUGIN_DIR . 'includes/class-jsc-content-installer.php';
+require_once JSC_PLUGIN_DIR . 'includes/class-jsc-statistics-repository.php';
+require_once JSC_PLUGIN_DIR . 'includes/class-jsc-statistics.php';
+require_once JSC_PLUGIN_DIR . 'includes/class-jsc-trend-provider.php';
+require_once JSC_PLUGIN_DIR . 'includes/class-jsc-settings.php';
 require_once JSC_PLUGIN_DIR . 'includes/class-jsc-rule-repository.php';
 require_once JSC_PLUGIN_DIR . 'includes/class-jsc-link-analyzer.php';
 require_once JSC_PLUGIN_DIR . 'includes/class-jsc-risk-calculator.php';

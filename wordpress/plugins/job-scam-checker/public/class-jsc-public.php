@@ -17,6 +17,7 @@ class JSC_Public {
         add_action( 'wp_enqueue_scripts', array( $this, 'register_assets' ) );
         add_shortcode( 'job_scam_checker', array( $this, 'render_checker' ) );
         add_shortcode( 'jsc_ad_slot', array( $this, 'render_ad_slot' ) );
+        add_shortcode( 'jsc_trends', array( $this, 'render_trends' ) );
     }
 
     /**
@@ -55,6 +56,8 @@ class JSC_Public {
             'JSCCheckerConfig',
             array(
                 'endpoint' => esc_url_raw( rest_url( 'job-scam-checker/v1/analyze' ) ),
+                'followUpEndpoint' => esc_url_raw( rest_url( 'job-scam-checker/v1/follow-up' ) ),
+                'followUpEnabled'  => JSC_Statistics::follow_up_enabled(),
                 'nonce'    => wp_create_nonce( 'jsc_analyze_message' ),
                 'labels'   => array(
                     'checking'       => __( 'Checking message…', 'job-scam-checker' ),
@@ -70,6 +73,8 @@ class JSC_Public {
                     'warningPlural'  => __( 'warning signs detected', 'job-scam-checker' ),
                     'resultReady'    => __( 'Analysis complete.', 'job-scam-checker' ),
                     'configuration'  => __( 'Checker configuration is unavailable. Refresh the page and try again.', 'job-scam-checker' ),
+                    'followUpThanks' => __( 'Thank you. Your anonymous answers were added to aggregate totals.', 'job-scam-checker' ),
+                    'followUpError'  => __( 'The optional answers could not be submitted. Your checker result is unaffected.', 'job-scam-checker' ),
                 ),
             )
         );
@@ -90,5 +95,30 @@ class JSC_Public {
         $position   = sanitize_key( $attributes['position'] );
 
         return '<aside class="jsc-content-ad-slot" data-jsc-ad-position="' . esc_attr( $position ) . '" aria-label="' . esc_attr__( 'Advertisement', 'job-scam-checker' ) . '" hidden></aside>';
+    }
+
+    /** Render honest trends only after both comparison periods meet thresholds. */
+    public function render_trends() {
+        global $wpdb;
+        $cached = get_transient( 'jsc_public_trends' );
+        if ( ! is_array( $cached ) || ! array_key_exists( 'items', $cached ) ) {
+            $cached = array( 'items' => ( new JSC_Trend_Provider( new JSC_Statistics_Repository( $wpdb ) ) )->get_trends() );
+            set_transient( 'jsc_public_trends', $cached, 15 * MINUTE_IN_SECONDS );
+        }
+        $trends = $cached['items'];
+        ob_start();
+        ?>
+        <section class="jsc-trends" aria-labelledby="jsc-trends-title">
+            <p class="jsc-eyebrow"><?php esc_html_e( 'Based on anonymous aggregate checks', 'job-scam-checker' ); ?></p>
+            <h2 id="jsc-trends-title"><?php esc_html_e( 'Trending Job Scam Patterns', 'job-scam-checker' ); ?></h2>
+            <?php if ( empty( $trends ) ) : ?>
+                <p class="jsc-trends__empty"><?php esc_html_e( 'Not enough real data yet to show a trend.', 'job-scam-checker' ); ?></p>
+            <?php else : ?>
+                <p><?php esc_html_e( 'These patterns appeared more often relative to all checks in the latest 14 days than in the preceding 14 days.', 'job-scam-checker' ); ?></p>
+                <ul><?php foreach ( $trends as $trend ) : ?><li><?php echo esc_html( $trend['label'] ); ?></li><?php endforeach; ?></ul>
+            <?php endif; ?>
+        </section>
+        <?php
+        return (string) ob_get_clean();
     }
 }

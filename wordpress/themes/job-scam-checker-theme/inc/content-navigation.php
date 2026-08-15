@@ -61,9 +61,22 @@ function jsc_theme_breadcrumbs() {
 function jsc_theme_related_content() {
     $related_keys = get_post_meta( get_the_ID(), '_jsc_related_pages', true );
     $installed    = get_option( 'jsc_installed_pages', array() );
-    if ( ! is_array( $related_keys ) || ! is_array( $installed ) ) {
+    if ( ! is_array( $installed ) ) {
         return;
     }
+    $related_keys = is_array( $related_keys ) ? $related_keys : array();
+
+    // Add reverse relationships and a small number of same-topic-type pages.
+    // This reuses the 30-page installer map and avoids a broad public query.
+    $current_key  = array_search( get_the_ID(), array_map( 'intval', $installed ), true );
+    $current_type = get_post_meta( get_the_ID(), '_jsc_content_type', true );
+    foreach ( $installed as $candidate_key => $candidate_id ) {
+        if ( (int) $candidate_id === get_the_ID() ) { continue; }
+        $candidate_related = get_post_meta( (int) $candidate_id, '_jsc_related_pages', true );
+        if ( $current_key && is_array( $candidate_related ) && in_array( $current_key, $candidate_related, true ) ) { $related_keys[] = $candidate_key; }
+        if ( count( array_unique( $related_keys ) ) < 6 && $current_type && $current_type === get_post_meta( (int) $candidate_id, '_jsc_content_type', true ) ) { $related_keys[] = $candidate_key; }
+    }
+    $related_keys = array_slice( array_unique( $related_keys ), 0, 6 );
 
     $related = array();
     foreach ( $related_keys as $key ) {

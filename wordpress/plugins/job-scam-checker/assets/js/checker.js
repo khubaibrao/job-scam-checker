@@ -36,6 +36,11 @@
     var retryButton = root.querySelector('[data-jsc-retry]');
     var resetButton = root.querySelector('[data-jsc-reset]');
     var printButton = root.querySelector('[data-jsc-print]');
+    var followUp = root.querySelector('[data-jsc-follow-up]');
+    var followUpStatus = root.querySelector('[data-jsc-follow-up-status]');
+    var purposeWrap = root.querySelector('[data-jsc-purpose-wrap]');
+    var purpose = root.querySelector('[data-jsc-purpose]');
+    var collectionToken = '';
 
     function updateCount() {
       counter.textContent = String(textarea.value.length);
@@ -153,6 +158,10 @@
       renderDomains(data);
       renderActions(data);
 
+      collectionToken = typeof data.collection_token === 'string' ? data.collection_token : '';
+      followUp.hidden = !(config.followUpEnabled && collectionToken);
+      followUpStatus.textContent = '';
+
       errorPanel.hidden = true;
       result.hidden = false;
       status.textContent = config.labels.resultReady + ' ' + data.level.label + ', score ' + data.score + ' out of 100, ' + data.warning_count + ' ' + countLabel + '.';
@@ -227,8 +236,39 @@
       textarea.value = '';
       updateCount();
       status.textContent = '';
+      followUp.hidden = true;
+      followUp.reset();
+      purposeWrap.hidden = true;
+      purpose.required = false;
+      collectionToken = '';
       textarea.focus();
       textarea.scrollIntoView(scrollOptions('center'));
+    });
+
+    followUp.querySelectorAll('[data-jsc-money]').forEach(function (radio) {
+      radio.addEventListener('change', function () {
+        purposeWrap.hidden = radio.value !== 'yes';
+        purpose.required = radio.value === 'yes';
+        if (radio.value !== 'yes') { purpose.value = ''; }
+      });
+    });
+
+    followUp.addEventListener('submit', function (event) {
+      event.preventDefault();
+      if (!followUp.reportValidity() || !collectionToken) { return; }
+      var selectedMoney = followUp.querySelector('[data-jsc-money]:checked');
+      var submit = followUp.querySelector('button[type="submit"]');
+      submit.disabled = true;
+      fetch(config.followUpEndpoint, {
+        method: 'POST', credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json', 'X-JSC-Nonce': config.nonce },
+        body: JSON.stringify({ token: collectionToken, channel: followUp.querySelector('[data-jsc-channel]').value, money_requested: selectedMoney ? selectedMoney.value : '', payment_purpose: purpose.value })
+      }).then(function (response) {
+        if (!response.ok) { throw new Error(config.labels.followUpError); }
+        collectionToken = '';
+        followUp.querySelectorAll('select, input, button').forEach(function (control) { control.disabled = true; });
+        followUpStatus.textContent = config.labels.followUpThanks;
+      }).catch(function () { followUpStatus.textContent = config.labels.followUpError; submit.disabled = false; });
     });
   }
 

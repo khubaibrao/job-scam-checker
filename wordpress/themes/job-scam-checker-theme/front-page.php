@@ -59,6 +59,10 @@ get_header();
         </div>
     </section>
 
+    <?php if ( shortcode_exists( 'jsc_trends' ) ) : ?>
+        <section class="homepage-trends"><div class="site-container narrow-container"><?php echo do_shortcode( '[jsc_trends]' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Trusted shortcode output. ?></div></section>
+    <?php endif; ?>
+
     <section class="explore-content" aria-labelledby="explore-content-title">
         <div class="site-container narrow-container">
             <p class="section-kicker"><?php esc_html_e( 'Learn the patterns', 'job-scam-checker-theme' ); ?></p>

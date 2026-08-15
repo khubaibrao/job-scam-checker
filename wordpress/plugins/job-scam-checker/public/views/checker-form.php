@@ -73,6 +73,25 @@ if ( ! defined( 'ABSPATH' ) ) {
             <p class="jsc-result-disclaimer" data-jsc-disclaimer></p>
         </aside>
 
+        <form class="jsc-follow-up" data-jsc-follow-up hidden>
+            <h4><?php esc_html_e( 'Help improve anonymous scam trends', 'job-scam-checker' ); ?></h4>
+            <p><?php esc_html_e( 'Optional. Only these selections are added to aggregate counters; your message is never included.', 'job-scam-checker' ); ?></p>
+            <label for="<?php echo esc_attr( $instance_id ); ?>-channel"><?php esc_html_e( 'How did you receive this job offer?', 'job-scam-checker' ); ?></label>
+            <select id="<?php echo esc_attr( $instance_id ); ?>-channel" data-jsc-channel required>
+                <option value=""><?php esc_html_e( 'Choose one', 'job-scam-checker' ); ?></option>
+                <option value="whatsapp">WhatsApp</option><option value="telegram">Telegram</option><option value="sms">SMS</option><option value="email"><?php esc_html_e( 'Email', 'job-scam-checker' ); ?></option><option value="linkedin">LinkedIn</option><option value="facebook">Facebook</option><option value="job_board"><?php esc_html_e( 'Job board', 'job-scam-checker' ); ?></option><option value="other"><?php esc_html_e( 'Other', 'job-scam-checker' ); ?></option>
+            </select>
+            <fieldset><legend><?php esc_html_e( 'Did they ask you for money?', 'job-scam-checker' ); ?></legend>
+                <label><input type="radio" name="<?php echo esc_attr( $instance_id ); ?>-money" value="yes" data-jsc-money required> <?php esc_html_e( 'Yes', 'job-scam-checker' ); ?></label>
+                <label><input type="radio" name="<?php echo esc_attr( $instance_id ); ?>-money" value="no" data-jsc-money required> <?php esc_html_e( 'No', 'job-scam-checker' ); ?></label>
+            </fieldset>
+            <div data-jsc-purpose-wrap hidden><label for="<?php echo esc_attr( $instance_id ); ?>-purpose"><?php esc_html_e( 'What was the requested payment for?', 'job-scam-checker' ); ?></label>
+                <select id="<?php echo esc_attr( $instance_id ); ?>-purpose" data-jsc-purpose><option value=""><?php esc_html_e( 'Choose one', 'job-scam-checker' ); ?></option><option value="training"><?php esc_html_e( 'Training', 'job-scam-checker' ); ?></option><option value="equipment"><?php esc_html_e( 'Equipment', 'job-scam-checker' ); ?></option><option value="registration"><?php esc_html_e( 'Registration', 'job-scam-checker' ); ?></option><option value="task_deposit"><?php esc_html_e( 'Task deposit', 'job-scam-checker' ); ?></option><option value="cryptocurrency"><?php esc_html_e( 'Cryptocurrency', 'job-scam-checker' ); ?></option><option value="gift_cards"><?php esc_html_e( 'Gift cards', 'job-scam-checker' ); ?></option><option value="other"><?php esc_html_e( 'Other', 'job-scam-checker' ); ?></option></select>
+            </div>
+            <button type="submit" class="jsc-secondary-button"><?php esc_html_e( 'Submit anonymous answers', 'job-scam-checker' ); ?></button>
+            <p data-jsc-follow-up-status role="status" aria-live="polite"></p>
+        </form>
+
         <footer class="jsc-result__footer">
             <button type="button" class="jsc-secondary-button" data-jsc-reset><?php esc_html_e( 'Check another message', 'job-scam-checker' ); ?></button>
             <button type="button" class="jsc-print-button" data-jsc-print><?php esc_html_e( 'Print or save result', 'job-scam-checker' ); ?></button>

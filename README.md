@@ -27,10 +27,17 @@ The curated SEO release contains 30 intentional pages with hierarchical scam and
 guide hubs, original educational articles, breadcrumbs, related reading, unique
 metadata and honest structured data. See `docs/phase4-content-seo.md`.
 
+Phase 5 adds administrator-controlled anonymous daily aggregate statistics,
+optional post-result channel/payment questions, threshold-gated real-data trends,
+native filtered WordPress search, and broader related-content paths. Statistics
+are disabled by default and never store pasted messages or visitor profiles. See
+`docs/phase5-trends-search.md`.
+
 ## Tests
 
 ```bash
 bash tools/test-all.sh
 ```
 
-See `docs/deployment-hostinger.md` for installation details.
+See `docs/deployment-hostinger.md` for installation details. Review **Settings →
+Job Scam Checker** before choosing whether to enable anonymous statistics.
