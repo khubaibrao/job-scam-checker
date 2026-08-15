@@ -42,6 +42,13 @@ risk-weight and pattern validation, arbitrary-code rejection, custom deletion
 and default protection, aggregate dashboard metrics, scoped admin assets, and an
 explicitly confirmed reset that targets only the Phase 5 aggregate table.
 
+Phase 7 adds hostile pasted HTML/JavaScript and suspicious-URL tests, explicit
+REST permission and CSRF checks, oversized-input and scoped-rate-limit behavior,
+malicious regex rejection, disabled-statistics/no-retention assertions, DOM-safe
+output, admin capability/nonce/safe-redirect checks, search bounds, accessibility
+markup and reduced-motion checks, asset scope, rule-cache invalidation, and all
+expected database indexes. The complete suite reruns every Phase 1–6 test first.
+
 After deployment to a WordPress staging site, manually verify:
 
 - Plugin and theme activation with debug logging enabled
@@ -59,3 +66,9 @@ After deployment to a WordPress staging site, manually verify:
 - Trend empty state before two real-data periods meet the sample thresholds
 - Search queries, content filters, pagination and no-results checker link
 - Daily aggregate retention cleanup through WordPress cron
+- REST requests without or with an expired checker nonce return 403
+- Repeated checker and optional follow-up requests receive scoped 429 responses
+- Pasted HTML/JavaScript appears nowhere as active markup or stored content
+- Enabled-rule changes invalidate the cache and affect the next check
+- Database migration reports version 3.1.0 and includes `metric_key`
+- Screen-reader announcements, 200%/400% zoom, reflow, focus and contrast

@@ -61,6 +61,11 @@ class JSC_Rule_Validator {
 
     private function valid_regex( $pattern ) {
         if ( '' === $pattern || false !== strpos( $pattern, '(?{' ) || false !== strpos( $pattern, '(??{' ) || false !== strpos( $pattern, '\\C' ) ) { return false; }
+        // Reject recursion, backreferences and nested quantified groups: these
+        // are unnecessary for detection rules and common catastrophic patterns.
+        if ( preg_match( '/\\\\[1-9]/', $pattern ) || false !== strpos( $pattern, '\\k<' ) || false !== strpos( $pattern, "\\k'" ) || false !== strpos( $pattern, '\\k{' ) ) { return false; }
+        if ( false !== strpos( $pattern, '(?R' ) || preg_match( '/\(\?(?:[0-9]+|&[a-z0-9_]+)\)/i', $pattern ) ) { return false; }
+        if ( preg_match( '/\([^)]*[+*][^)]*\)[+*{]/', $pattern ) ) { return false; }
         return false !== @preg_match( $pattern, '' ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- Validation must fail closed.
     }
 }

@@ -1,6 +1,6 @@
 # Hostinger deployment
 
-Phase 1 can run on an ordinary Hostinger WordPress plan without a VPS or another
+The project can run on an ordinary Hostinger WordPress plan without a VPS or another
 service.
 
 1. Back up the existing WordPress site and database.
@@ -45,3 +45,25 @@ one indexed aggregate table. It needs no Hostinger cron configuration.
 Updating from Phase 5 runs a normal WordPress `dbDelta` migration that adds the
 protected-default marker to the existing rules table. It preserves existing
 rules, aggregate statistics, options, and content. No manual SQL is required.
+
+Updating to Phase 7 runs `dbDelta` once for database version 3.1.0 and adds the
+non-unique `metric_key (metric, stat_key)` statistics index. It does not delete or
+rewrite rules, counters, settings or content. Back up first as for any update.
+
+## Recommended production settings
+
+Use supported PHP, force HTTPS, enable WordPress core security updates, and keep
+plugins/themes current. Use strong unique admin passwords and 2FA if available.
+Consider `define( 'DISALLOW_FILE_EDIT', true );` in `wp-config.php`, and keep
+`WP_DEBUG_DISPLAY` off in production.
+
+Ensure Hostinger, proxy and security-plugin logs do not capture REST request
+bodies. Set log retention to match the site privacy policy. Confirm caching does
+not cache REST POST responses and WordPress cron runs the daily cleanup. For
+sustained distributed abuse, use available host WAF/bot controls; the plugin uses
+a lightweight transient limiter intended for ordinary traffic.
+
+Before launch, test keyboard use, a screen reader, 200%/400% zoom, mobile reflow,
+contrast, checker errors/results, search, metadata, structured data, breadcrumbs,
+sitemap and robots behavior on staging. These controls cannot safely be imposed
+by the plugin itself.

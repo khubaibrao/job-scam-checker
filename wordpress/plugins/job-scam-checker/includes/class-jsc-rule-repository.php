@@ -10,6 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class JSC_Rule_Repository {
+    const CACHE_KEY = 'jsc_enabled_rules_v1';
     /** @var wpdb */
     private $wpdb;
 
@@ -30,13 +31,19 @@ class JSC_Rule_Repository {
      * @return array<int,array<string,mixed>>
      */
     public function get_enabled_rules() {
+        $cached = get_transient( self::CACHE_KEY );
+        if ( is_array( $cached ) ) {
+            return $cached;
+        }
         $query = "SELECT id, name, slug, match_type, pattern, category, score_group, weight, explanation, recommendation, priority
             FROM {$this->table}
             WHERE enabled = 1
             ORDER BY priority ASC, id ASC";
 
         $rules = $this->wpdb->get_results( $query, ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- Static table query with no user input.
-        return is_array( $rules ) ? $rules : array();
+        $rules = is_array( $rules ) ? $rules : array();
+        set_transient( self::CACHE_KEY, $rules, 5 * MINUTE_IN_SECONDS );
+        return $rules;
     }
 
     /** Return rules for administration, optionally filtered by a safe search term/category/status. */
@@ -72,22 +79,30 @@ class JSC_Rule_Repository {
     public function create( array $rule ) {
         $now = current_time( 'mysql', true );
         $data = array_merge( $rule, array( 'is_default' => 0, 'created_at' => $now, 'updated_at' => $now ) );
-        return $this->wpdb->insert( $this->table, $data, self::formats() ) ? (int) $this->wpdb->insert_id : 0;
+        $id = $this->wpdb->insert( $this->table, $data, self::formats() ) ? (int) $this->wpdb->insert_id : 0;
+        if ( $id ) { delete_transient( self::CACHE_KEY ); }
+        return $id;
     }
 
     /** Update only administrator-editable fields. */
     public function update( $id, array $rule ) {
         $rule['updated_at'] = current_time( 'mysql', true );
-        return false !== $this->wpdb->update( $this->table, $rule, array( 'id' => (int) $id ), array( '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%s', '%s', '%d', '%d', '%s' ), array( '%d' ) );
+        $updated = false !== $this->wpdb->update( $this->table, $rule, array( 'id' => (int) $id ), array( '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%s', '%s', '%d', '%d', '%s' ), array( '%d' ) );
+        if ( $updated ) { delete_transient( self::CACHE_KEY ); }
+        return $updated;
     }
 
     public function set_enabled( $id, $enabled ) {
-        return false !== $this->wpdb->update( $this->table, array( 'enabled' => $enabled ? 1 : 0, 'updated_at' => current_time( 'mysql', true ) ), array( 'id' => (int) $id ), array( '%d', '%s' ), array( '%d' ) );
+        $updated = false !== $this->wpdb->update( $this->table, array( 'enabled' => $enabled ? 1 : 0, 'updated_at' => current_time( 'mysql', true ) ), array( 'id' => (int) $id ), array( '%d', '%s' ), array( '%d' ) );
+        if ( $updated ) { delete_transient( self::CACHE_KEY ); }
+        return $updated;
     }
 
     /** Delete custom rules only; defaults fail closed. */
     public function delete_custom( $id ) {
-        return false !== $this->wpdb->query( $this->wpdb->prepare( "DELETE FROM {$this->table} WHERE id = %d AND is_default = 0", (int) $id ) );
+        $deleted = false !== $this->wpdb->query( $this->wpdb->prepare( "DELETE FROM {$this->table} WHERE id = %d AND is_default = 0", (int) $id ) );
+        if ( $deleted ) { delete_transient( self::CACHE_KEY ); }
+        return $deleted;
     }
 
     /**
@@ -111,6 +126,7 @@ class JSC_Rule_Repository {
             $rule['created_at'] = $now;
             $rule['updated_at'] = $now;
             $this->wpdb->insert( $this->table, $rule, self::formats() );
+            delete_transient( self::CACHE_KEY );
         }
     }
 

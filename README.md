@@ -39,6 +39,12 @@ rules, organized checker/privacy/display settings, a tightly scoped aggregate
 reset, and links into normal WordPress page editing. See
 `docs/phase6-admin-management.md`.
 
+Phase 7 hardens REST permissions, abuse controls, hostile HTML/URL handling,
+regex validation, search bounds and privacy regressions. It also caches enabled
+rules, removes repeated admin lookups, adds an aggregate-query index, and audits
+accessibility/shared-hosting deployment. Pasted messages are still never stored.
+See `docs/phase7-hardening-performance.md`.
+
 ## Tests
 
 ```bash

@@ -57,7 +57,8 @@ class JSC_Schema {
             stat_key varchar(100) NOT NULL,
             stat_count bigint(20) unsigned NOT NULL DEFAULT 0,
             PRIMARY KEY  (stat_date, metric, stat_key),
-            KEY metric_date (metric, stat_date)
+            KEY metric_date (metric, stat_date),
+            KEY metric_key (metric, stat_key)
         ) {$charset_collate};";
         dbDelta( $stats_sql );
 

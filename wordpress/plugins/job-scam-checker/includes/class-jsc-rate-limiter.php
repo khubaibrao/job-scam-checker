@@ -20,16 +20,22 @@ class JSC_Rate_Limiter {
      *
      * @return bool True when allowed.
      */
-    public function consume() {
-        $address = isset( $_SERVER['REMOTE_ADDR'] ) ? (string) $_SERVER['REMOTE_ADDR'] : 'unknown';
-        $key     = 'jsc_rate_' . hash_hmac( 'sha256', $address, wp_salt( 'nonce' ) );
+    public function consume( $scope = 'checker', $limit = self::LIMIT, $window = self::WINDOW ) {
+        $address = isset( $_SERVER['REMOTE_ADDR'] ) ? trim( (string) $_SERVER['REMOTE_ADDR'] ) : 'unknown';
+        if ( false === filter_var( $address, FILTER_VALIDATE_IP ) ) {
+            $address = 'unknown';
+        }
+        $scope  = sanitize_key( $scope );
+        $limit  = min( 120, max( 1, (int) $limit ) );
+        $window = min( HOUR_IN_SECONDS, max( 10, (int) $window ) );
+        $key    = 'jsc_rate_' . $scope . '_' . hash_hmac( 'sha256', $address, wp_salt( 'nonce' ) );
         $count   = (int) get_transient( $key );
 
-        if ( $count >= self::LIMIT ) {
+        if ( $count >= $limit ) {
             return false;
         }
 
-        set_transient( $key, $count + 1, self::WINDOW );
+        set_transient( $key, $count + 1, $window );
         return true;
     }
 }

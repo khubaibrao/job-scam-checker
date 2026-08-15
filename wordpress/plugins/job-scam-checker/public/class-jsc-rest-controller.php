@@ -27,7 +27,7 @@ class JSC_REST_Controller {
             array(
                 'methods'             => WP_REST_Server::CREATABLE,
                 'callback'            => array( $this, 'analyze' ),
-                'permission_callback' => '__return_true',
+                'permission_callback' => array( $this, 'permission_check' ),
             )
         );
         register_rest_route(
@@ -36,9 +36,18 @@ class JSC_REST_Controller {
             array(
                 'methods'             => WP_REST_Server::CREATABLE,
                 'callback'            => array( $this, 'follow_up' ),
-                'permission_callback' => '__return_true',
+                'permission_callback' => array( $this, 'permission_check' ),
             )
         );
+    }
+
+    /** Require the short-lived same-origin nonce before a public callback runs. */
+    public function permission_check( $request ) {
+        $nonce = $request ? $request->get_header( 'X-JSC-Nonce' ) : '';
+        if ( ! is_string( $nonce ) || ! wp_verify_nonce( $nonce, 'jsc_analyze_message' ) ) {
+            return new WP_Error( 'jsc_invalid_nonce', __( 'Security check failed. Refresh the page and try again.', 'job-scam-checker' ), array( 'status' => 403 ) );
+        }
+        return true;
     }
 
     /**
@@ -51,10 +60,8 @@ class JSC_REST_Controller {
         if ( '0' === (string) get_option( 'jsc_checker_enabled', '1' ) ) {
             return new WP_Error( 'jsc_checker_disabled', __( 'The Job Scam Checker is temporarily unavailable.', 'job-scam-checker' ), array( 'status' => 503 ) );
         }
-        $nonce = $request->get_header( 'X-JSC-Nonce' );
-        if ( ! $nonce || ! wp_verify_nonce( $nonce, 'jsc_analyze_message' ) ) {
-            return new WP_Error( 'jsc_invalid_nonce', __( 'Security check failed. Refresh the page and try again.', 'job-scam-checker' ), array( 'status' => 403 ) );
-        }
+        $permission = $this->permission_check( $request );
+        if ( is_wp_error( $permission ) ) { return $permission; }
 
         $content_length = (int) $request->get_header( 'Content-Length' );
         if ( $content_length > self::MAX_BYTES + 2048 ) {
@@ -93,9 +100,10 @@ class JSC_REST_Controller {
 
     /** Accept a validated, one-use aggregate-only follow-up response. */
     public function follow_up( $request ) {
-        $nonce = $request->get_header( 'X-JSC-Nonce' );
-        if ( ! $nonce || ! wp_verify_nonce( $nonce, 'jsc_analyze_message' ) ) {
-            return new WP_Error( 'jsc_invalid_nonce', __( 'Security check failed. Refresh the page and try again.', 'job-scam-checker' ), array( 'status' => 403 ) );
+        $permission = $this->permission_check( $request );
+        if ( is_wp_error( $permission ) ) { return $permission; }
+        if ( ! ( new JSC_Rate_Limiter() )->consume( 'follow_up', 30, MINUTE_IN_SECONDS ) ) {
+            return new WP_Error( 'jsc_rate_limited', __( 'Too many optional responses were submitted. Wait a minute and try again.', 'job-scam-checker' ), array( 'status' => 429 ) );
         }
         $result = ( new JSC_Statistics() )->record_follow_up(
             $request->get_param( 'token' ),

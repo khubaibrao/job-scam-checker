@@ -5,6 +5,10 @@ function jsc_theme_search_query( $query ) {
     if ( is_admin() || ! $query->is_main_query() || ! $query->is_search() ) { return; }
     $query->set( 'post_type', 'page' );
     $query->set( 'posts_per_page', 12 );
+    $term = (string) $query->get( 's' );
+    if ( strlen( $term ) > 100 ) {
+        $query->set( 's', substr( $term, 0, 100 ) );
+    }
     $filter  = '0' !== (string) get_option( 'jsc_search_filters_enabled', '1' ) && isset( $_GET['content_type'] ) ? sanitize_key( wp_unslash( $_GET['content_type'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only public filter.
     $allowed = array( 'tool', 'hub', 'scam_article', 'guide', 'trust', 'legal' );
     if ( in_array( $filter, $allowed, true ) ) { $query->set( 'meta_query', array( array( 'key' => '_jsc_content_type', 'value' => $filter ) ) ); }

@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
     <form class="jsc-checker__form" data-jsc-checker-form method="post" action="">
         <label for="<?php echo esc_attr( $instance_id ); ?>-message"><?php esc_html_e( 'Suspicious job or recruiter message', 'job-scam-checker' ); ?></label>
-        <textarea id="<?php echo esc_attr( $instance_id ); ?>-message" name="jsc_message" rows="9" minlength="10" maxlength="12000" required placeholder="<?php echo esc_attr__( 'Paste the suspicious message here...', 'job-scam-checker' ); ?>" aria-describedby="<?php echo esc_attr( $instance_id ); ?>-privacy <?php echo esc_attr( $instance_id ); ?>-count"></textarea>
+        <textarea id="<?php echo esc_attr( $instance_id ); ?>-message" name="jsc_message" rows="9" minlength="10" maxlength="12000" required spellcheck="false" autocapitalize="off" autocomplete="off" placeholder="<?php echo esc_attr__( 'Paste the suspicious message here...', 'job-scam-checker' ); ?>" aria-describedby="<?php echo esc_attr( $instance_id ); ?>-privacy <?php echo esc_attr( $instance_id ); ?>-count"></textarea>
 
         <div class="jsc-checker__meta">
             <p id="<?php echo esc_attr( $instance_id ); ?>-privacy" class="jsc-privacy-warning">

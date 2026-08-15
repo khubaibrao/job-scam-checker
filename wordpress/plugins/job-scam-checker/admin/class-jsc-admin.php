@@ -6,6 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 class JSC_Admin {
     const CAPABILITY = 'manage_options';
     private $repository;
+    private $rule_labels;
 
     public function __construct( JSC_Rule_Repository $repository = null ) {
         if ( $repository ) { $this->repository = $repository; }
@@ -87,7 +88,13 @@ class JSC_Admin {
     }
 
     private function stat_label( $metric, $key ) {
-        if ( 'detection' === $metric ) { $rules = $this->repository()->get_rules( $key ); foreach ( $rules as $rule ) { if ( $rule['slug'] === $key ) { return $rule['name']; } } }
+        if ( 'detection' === $metric ) {
+            if ( null === $this->rule_labels ) {
+                $this->rule_labels = array();
+                foreach ( $this->repository()->get_rules() as $rule ) { $this->rule_labels[ $rule['slug'] ] = $rule['name']; }
+            }
+            if ( isset( $this->rule_labels[ $key ] ) ) { return $this->rule_labels[ $key ]; }
+        }
         return ucwords( str_replace( '_', ' ', $key ) );
     }
 

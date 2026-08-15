@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-define( 'JSC_THEME_VERSION', '0.6.0' );
+define( 'JSC_THEME_VERSION', '0.7.0' );
 
 require_once get_template_directory() . '/inc/setup.php';
 require_once get_template_directory() . '/inc/assets.php';
