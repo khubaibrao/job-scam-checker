@@ -49,6 +49,21 @@ output, admin capability/nonce/safe-redirect checks, search bounds, accessibilit
 markup and reduced-motion checks, asset scope, rule-cache invalidation, and all
 expected database indexes. The complete suite reruns every Phase 1–6 test first.
 
+Phase 8 adds 44 automated release contracts covering clean activation metadata,
+theme readiness, fresh/idempotent content installation, schema/default seeding,
+separate schema upgrades, low/caution/high/very-high checker flows, suspicious
+links, message non-retention, statistics defaults, REST validation/nonces/rate
+limits, search/no-results/404 contracts, metadata/Open Graph, structured data,
+sitemap/robots behavior, uninstall safety, platform minimums, absence of external
+runtime dependencies/secrets, archive structure, production-only file contents,
+ZIP integrity, and SHA-256 verification. Together, Phases 1–8 run **304 tests**.
+
+The full command rebuilds release archives before validating them:
+
+```bash
+bash tools/test-all.sh
+```
+
 After deployment to a WordPress staging site, manually verify:
 
 - Plugin and theme activation with debug logging enabled
@@ -71,4 +86,6 @@ After deployment to a WordPress staging site, manually verify:
 - Pasted HTML/JavaScript appears nowhere as active markup or stored content
 - Enabled-rule changes invalidate the cache and affect the next check
 - Database migration reports version 3.1.0 and includes `metric_key`
+- Plugin and theme ZIP upload/activation on the exact Hostinger staging site
+- HTTPS, host caching exclusions for REST POSTs, sitemap and robots responses
 - Screen-reader announcements, 200%/400% zoom, reflow, focus and contrast

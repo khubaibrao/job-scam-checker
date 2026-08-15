@@ -45,6 +45,27 @@ rules, removes repeated admin lookups, adds an aggregate-query index, and audits
 accessibility/shared-hosting deployment. Pasted messages are still never stored.
 See `docs/phase7-hardening-performance.md`.
 
+Phase 8 is the production-ready MVP 1.0.0 release. It adds final installation,
+security, privacy, SEO, performance, compatibility and archive validation;
+reproducible plugin/theme ZIPs; SHA-256 checksums; and a manual Hostinger guide.
+See `docs/phase8-release-deployment.md`.
+
+## How to install the MVP
+
+1. Back up WordPress, then confirm it runs WordPress 6.4 or newer and PHP 7.4
+   or newer (PHP 8.2 is recommended).
+2. In **Plugins → Add New → Upload Plugin**, upload
+   `release/job-scam-checker-1.0.0.zip`, install it, and activate it.
+3. In **Appearance → Themes → Add New → Upload Theme**, upload
+   `release/job-scam-checker-theme-1.0.0.zip`, install it, and activate it.
+4. Save **Settings → Permalinks**, verify **Settings → Reading** uses the Home
+   page, and review **Job Scam Checker → Settings**.
+5. Review all owner, contact, Privacy, Terms, and Disclaimer content before
+   launch. Then test the checker, search, `/wp-sitemap.xml`, and `/robots.txt`.
+
+Full non-technical instructions and rollback steps are in
+`docs/deployment-hostinger.md`.
+
 ## Tests
 
 ```bash

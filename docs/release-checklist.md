@@ -1,0 +1,27 @@
+# MVP 1.0.0 pre-launch checklist
+
+- [ ] Domain connected and correct site opens
+- [ ] SSL enabled; WordPress URLs and pages use HTTPS
+- [ ] Restorable files-and-database backup available
+- [ ] WordPress, active plugins, and themes updated
+- [ ] Job Scam Checker plugin active
+- [ ] Job Scam Checker theme active
+- [ ] Permalinks saved (Post name recommended)
+- [ ] Static homepage is correct
+- [ ] Checker tested with legitimate and scam samples
+- [ ] Privacy Policy personally reviewed
+- [ ] Terms of Use personally reviewed
+- [ ] Disclaimer personally reviewed
+- [ ] Contact information accurate
+- [ ] No placeholder/example owner information remains
+- [ ] Sitemap accessible at `/wp-sitemap.xml`
+- [ ] `/robots.txt` checked and public indexability intended
+- [ ] Mobile layout, keyboard use, zoom, and focus tested
+- [ ] Search, no-results, and 404 flows tested
+- [ ] Admin overview, rules, settings, statistics, privacy, and content tested
+- [ ] Statistics/privacy settings consciously reviewed
+- [ ] No fake statistics shown; honest empty states appear when appropriate
+- [ ] No fake ads shown; AdSense targets remain empty placeholders only
+- [ ] Search Console ownership/submission ready if desired
+- [ ] Analytics absent unless deliberately configured and disclosed later
+- [ ] Backup date and rollback steps recorded

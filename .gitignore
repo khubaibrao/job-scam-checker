@@ -6,3 +6,8 @@ vendor/
 node_modules/
 dist/
 *.zip
+release/*
+!release/job-scam-checker-1.0.0.zip
+!release/job-scam-checker-theme-1.0.0.zip
+!release/SHA256SUMS
+!release/RELEASE-NOTES.md

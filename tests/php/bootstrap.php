@@ -8,7 +8,7 @@ define( 'OBJECT', 'OBJECT' );
 define( 'ARRAY_A', 'ARRAY_A' );
 define( 'MINUTE_IN_SECONDS', 60 );
 define( 'HOUR_IN_SECONDS', 3600 );
-define( 'JSC_VERSION', '0.7.0' );
+define( 'JSC_VERSION', '1.0.0' );
 define( 'JSC_DB_VERSION', '3.1.0' );
 define( 'JSC_CONTENT_VERSION', '5.0.0' );
 define( 'JSC_PLUGIN_DIR', dirname( __DIR__, 2 ) . '/wordpress/plugins/job-scam-checker/' );
