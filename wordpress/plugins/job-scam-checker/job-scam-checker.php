@@ -3,7 +3,7 @@
  * Plugin Name:       Job Scam Checker
  * Plugin URI:        https://example.com/job-scam-checker
  * Description:       Privacy-first, rule-based job scam checking tools and site foundations.
- * Version:           0.3.0
+ * Version:           0.4.0
  * Requires at least: 6.4
  * Requires PHP:      7.4
  * Author:            Job Scam Checker
@@ -16,8 +16,9 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-define( 'JSC_VERSION', '0.3.0' );
+define( 'JSC_VERSION', '0.4.0' );
 define( 'JSC_DB_VERSION', '1.0.0' );
+define( 'JSC_CONTENT_VERSION', '4.0.0' );
 define( 'JSC_PLUGIN_FILE', __FILE__ );
 define( 'JSC_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'JSC_PLUGIN_URL', plugin_dir_url( __FILE__ ) );

@@ -27,12 +27,12 @@ jsc_test( 'installer defines the checker page', isset( $definitions['job_scam_ch
 jsc_test( 'checker page uses the public shortcode', false !== strpos( $definitions['job_scam_checker']['content'], '[job_scam_checker]' ) );
 
 $first_install = JSC_Content_Installer::install();
-jsc_test( 'installer creates two Phase 1 pages', 2 === count( $GLOBALS['jsc_test_pages'] ) );
+jsc_test( 'installer creates the full content release', 30 === count( $GLOBALS['jsc_test_pages'] ) );
 jsc_test( 'installer assigns a static homepage', 'page' === $GLOBALS['jsc_test_options']['show_on_front'] );
 jsc_test( 'installer records homepage ID', $first_install['home'] === $GLOBALS['jsc_test_options']['page_on_front'] );
 
 $second_install = JSC_Content_Installer::install();
-jsc_test( 'installer is idempotent', 2 === count( $GLOBALS['jsc_test_pages'] ) );
+jsc_test( 'installer is idempotent', 30 === count( $GLOBALS['jsc_test_pages'] ) );
 jsc_test( 'existing page IDs remain stable', $first_install === $second_install );
 
 $public = new JSC_Public();

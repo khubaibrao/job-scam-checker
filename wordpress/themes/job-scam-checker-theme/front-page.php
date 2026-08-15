@@ -38,7 +38,7 @@ get_header();
         <div class="site-container narrow-container">
             <p class="section-kicker"><?php esc_html_e( 'A careful second look', 'job-scam-checker-theme' ); ?></p>
             <h2 id="how-it-helps-title"><?php esc_html_e( 'Pause before you pay, click or share', 'job-scam-checker-theme' ); ?></h2>
-            <p><?php esc_html_e( 'Job scams often create urgency, promise unusually easy income, move conversations away from trusted platforms, or request money and sensitive information. This service is being built to explain those warning signs in plain language.', 'job-scam-checker-theme' ); ?></p>
+            <p><?php esc_html_e( 'Job scams often create urgency, promise unusually easy income, move conversations away from trusted platforms, or request money and sensitive information. The checker explains detected warning signs in plain language and points to independent verification steps.', 'job-scam-checker-theme' ); ?></p>
             <div class="safety-cards">
                 <article>
                     <span class="safety-card__number" aria-hidden="true">01</span>
@@ -55,6 +55,19 @@ get_header();
                     <h3><?php esc_html_e( 'Verify independently', 'job-scam-checker-theme' ); ?></h3>
                     <p><?php esc_html_e( 'Use the employer’s official website and verified contact details before proceeding.', 'job-scam-checker-theme' ); ?></p>
                 </article>
+            </div>
+        </div>
+    </section>
+
+    <section class="explore-content" aria-labelledby="explore-content-title">
+        <div class="site-container narrow-container">
+            <p class="section-kicker"><?php esc_html_e( 'Learn the patterns', 'job-scam-checker-theme' ); ?></p>
+            <h2 id="explore-content-title"><?php esc_html_e( 'Verify the offer beyond the message', 'job-scam-checker-theme' ); ?></h2>
+            <p><?php esc_html_e( 'Use practical guides and scam-pattern explanations to check the recruiter, employer, interview and any request for money or personal information.', 'job-scam-checker-theme' ); ?></p>
+            <div class="homepage-content-grid">
+                <article><h3><a href="<?php echo esc_url( home_url( '/job-scams/' ) ); ?>"><?php esc_html_e( 'Explore job scam types', 'job-scam-checker-theme' ); ?></a></h3><p><?php esc_html_e( 'Compare the approach with remote-work, task, fake-check, impersonation and fee scam patterns.', 'job-scam-checker-theme' ); ?></p></article>
+                <article><h3><a href="<?php echo esc_url( home_url( '/guides/how-to-check-a-job-offer/' ) ); ?>"><?php esc_html_e( 'Check a job offer', 'job-scam-checker-theme' ); ?></a></h3><p><?php esc_html_e( 'Confirm the role, recruiter, interview, compensation and onboarding through independent sources.', 'job-scam-checker-theme' ); ?></p></article>
+                <article><h3><a href="<?php echo esc_url( home_url( '/guides/what-to-do-after-a-job-scam/' ) ); ?>"><?php esc_html_e( 'Respond to a suspected scam', 'job-scam-checker-theme' ); ?></a></h3><p><?php esc_html_e( 'Prioritize payments, accounts, identity records, device access, evidence and reporting.', 'job-scam-checker-theme' ); ?></p></article>
             </div>
         </div>
     </section>

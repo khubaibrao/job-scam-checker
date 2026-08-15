@@ -15,6 +15,7 @@ class JSC_Plugin {
      */
     public function run() {
         JSC_Schema::maybe_upgrade();
+        JSC_Content_Installer::maybe_install();
 
         $public = new JSC_Public();
         $public->register_hooks();

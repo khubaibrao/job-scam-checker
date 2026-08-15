@@ -22,6 +22,13 @@ accessible relationships, announcements, progress, and alerts; no-JavaScript and
 malformed-response handling; DOM-safe rendering; phone/mobile breakpoints; print
 rules; and the empty hidden advertising integration target.
 
+Phase 4 validates the exact page inventory and type counts, hierarchical path
+uniqueness, internal-link resolution, related-key integrity, title/description
+uniqueness, minimum article depth, heading hierarchy, required fictional-example
+and safety sections, pairwise content similarity, empty ad targets, robots and
+sitemap integration, permitted schema types, visible breadcrumbs, accurate
+privacy claims, hub completeness, and absence of rating/review claims.
+
 After deployment to a WordPress staging site, manually verify:
 
 - Plugin and theme activation with debug logging enabled

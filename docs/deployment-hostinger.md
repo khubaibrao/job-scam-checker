@@ -14,9 +14,16 @@ service.
 7. Confirm that Home is selected under Settings > Reading.
 8. Assign Primary and Footer menus under Appearance > Menus if desired. The
    theme supplies a small fallback primary menu until one is assigned.
+9. Review all generated editorial and legal pages in WordPress. Configure an
+   accurate contact channel and jurisdiction-appropriate operator details before
+   public launch; the project deliberately invents none.
+10. Confirm `/wp-sitemap.xml` and `/robots.txt`, then submit the sitemap to Search
+    Console only if desired.
 
 The plugin activation routine creates `/home/` and `/job-scam-checker/` only when
-those slugs do not already exist. Existing pages are preserved.
+those slugs do not already exist. The Phase 4 content release also creates the
+curated hubs, articles, guides and trust pages. Existing pages are preserved, and
+only exact untouched foundation content is eligible for automatic upgrading.
 
 ## Checker behavior
 

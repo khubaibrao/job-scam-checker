@@ -20,7 +20,7 @@
                 array(
                     'theme_location' => 'footer',
                     'container'      => false,
-                    'fallback_cb'    => false,
+                    'fallback_cb'    => 'jsc_theme_footer_menu_fallback',
                     'depth'          => 1,
                 )
             );
@@ -35,3 +35,18 @@
 <?php wp_footer(); ?>
 </body>
 </html>
+<?php
+/**
+ * Provide trust and legal navigation before a custom footer menu is assigned.
+ */
+function jsc_theme_footer_menu_fallback() {
+    ?>
+    <ul class="menu">
+        <li><a href="<?php echo esc_url( home_url( '/about/' ) ); ?>"><?php esc_html_e( 'About', 'job-scam-checker-theme' ); ?></a></li>
+        <li><a href="<?php echo esc_url( home_url( '/contact/' ) ); ?>"><?php esc_html_e( 'Contact', 'job-scam-checker-theme' ); ?></a></li>
+        <li><a href="<?php echo esc_url( home_url( '/privacy-policy/' ) ); ?>"><?php esc_html_e( 'Privacy', 'job-scam-checker-theme' ); ?></a></li>
+        <li><a href="<?php echo esc_url( home_url( '/terms-of-use/' ) ); ?>"><?php esc_html_e( 'Terms', 'job-scam-checker-theme' ); ?></a></li>
+        <li><a href="<?php echo esc_url( home_url( '/disclaimer/' ) ); ?>"><?php esc_html_e( 'Disclaimer', 'job-scam-checker-theme' ); ?></a></li>
+    </ul>
+    <?php
+}

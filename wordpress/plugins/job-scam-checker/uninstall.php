@@ -14,6 +14,7 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 
 delete_option( 'jsc_version' );
 delete_option( 'jsc_db_version' );
+delete_option( 'jsc_content_version' );
 delete_option( 'jsc_installed_pages' );
 
 global $wpdb;

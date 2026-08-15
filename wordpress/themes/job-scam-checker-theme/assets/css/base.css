@@ -89,6 +89,10 @@ h3 {
   max-width: 52rem;
 }
 
+.content-container--wide {
+  max-width: 68rem;
+}
+
 .site-main {
   min-height: 60vh;
   padding-block: clamp(3rem, 8vw, 6rem);

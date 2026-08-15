@@ -23,6 +23,10 @@ Results provide an accessible score and risk level, detailed warning explanation
 safe domain findings, and practical next steps. See
 `docs/phase3-results-experience.md` for the presentation and privacy contract.
 
+The curated SEO release contains 30 intentional pages with hierarchical scam and
+guide hubs, original educational articles, breadcrumbs, related reading, unique
+metadata and honest structured data. See `docs/phase4-content-seo.md`.
+
 ## Tests
 
 ```bash

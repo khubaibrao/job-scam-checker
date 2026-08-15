@@ -6,8 +6,9 @@
 define( 'ABSPATH', dirname( __DIR__, 2 ) . '/' );
 define( 'OBJECT', 'OBJECT' );
 define( 'ARRAY_A', 'ARRAY_A' );
-define( 'JSC_VERSION', '0.3.0' );
+define( 'JSC_VERSION', '0.4.0' );
 define( 'JSC_DB_VERSION', '1.0.0' );
+define( 'JSC_CONTENT_VERSION', '4.0.0' );
 define( 'JSC_PLUGIN_DIR', dirname( __DIR__, 2 ) . '/wordpress/plugins/job-scam-checker/' );
 define( 'JSC_PLUGIN_URL', 'https://example.test/wp-content/plugins/job-scam-checker/' );
 
@@ -18,14 +19,21 @@ $GLOBALS['jsc_test_scripts']  = array();
 $GLOBALS['jsc_test_shortcodes'] = array();
 $GLOBALS['jsc_test_transients'] = array();
 $GLOBALS['jsc_test_localized']  = array();
+$GLOBALS['jsc_test_post_meta']  = array();
 
 class WP_Post {
     public $ID;
     public $post_name;
+    public $post_content;
+    public $post_parent;
+    public $post_status;
 
-    public function __construct( $id, $slug ) {
+    public function __construct( $id, $slug, $content = '', $parent = 0 ) {
         $this->ID        = $id;
         $this->post_name = $slug;
+        $this->post_content = $content;
+        $this->post_parent = $parent;
+        $this->post_status = 'publish';
     }
 }
 
@@ -62,11 +70,12 @@ function wp_create_nonce() { return 'valid-test-nonce'; }
 function wp_verify_nonce( $nonce ) { return 'valid-test-nonce' === $nonce; }
 function rest_url( $path ) { return 'https://example.test/wp-json/' . $path; }
 function nocache_headers() {}
-function get_option( $name ) { return $GLOBALS['jsc_test_options'][ $name ] ?? false; }
+function get_option( $name, $default = false ) { return $GLOBALS['jsc_test_options'][ $name ] ?? $default; }
 function get_transient( $key ) { return $GLOBALS['jsc_test_transients'][ $key ] ?? false; }
 function set_transient( $key, $value ) { $GLOBALS['jsc_test_transients'][ $key ] = $value; return true; }
 function is_wp_error( $value ) { return $value instanceof WP_Error; }
 function add_action() {}
+function shortcode_atts( $defaults, $attributes ) { return array_merge( $defaults, $attributes ); }
 
 function add_shortcode( $name, $callback ) {
     $GLOBALS['jsc_test_shortcodes'][ $name ] = $callback;
@@ -92,14 +101,39 @@ function wp_localize_script( $handle, $name, $data ) {
     $GLOBALS['jsc_test_localized'][ $name ] = $data;
 }
 
-function get_page_by_path( $slug ) {
-    return $GLOBALS['jsc_test_pages'][ $slug ] ?? null;
+function get_page_by_path( $path ) {
+    return $GLOBALS['jsc_test_pages'][ $path ] ?? null;
 }
 
 function wp_insert_post( $post ) {
     $id = count( $GLOBALS['jsc_test_pages'] ) + 1;
-    $GLOBALS['jsc_test_pages'][ $post['post_name'] ] = new WP_Post( $id, $post['post_name'] );
+    $path = $post['post_name'];
+    if ( ! empty( $post['post_parent'] ) ) {
+        foreach ( $GLOBALS['jsc_test_pages'] as $candidate_path => $candidate ) {
+            if ( $candidate->ID === $post['post_parent'] ) {
+                $path = $candidate_path . '/' . $post['post_name'];
+                break;
+            }
+        }
+    }
+    $GLOBALS['jsc_test_pages'][ $path ] = new WP_Post( $id, $post['post_name'], $post['post_content'], $post['post_parent'] ?? 0 );
     return $id;
+}
+
+function wp_update_post( $post ) {
+    foreach ( $GLOBALS['jsc_test_pages'] as $page ) {
+        if ( $page->ID === $post['ID'] ) { $page->post_content = $post['post_content']; return $page->ID; }
+    }
+    return 0;
+}
+
+function update_post_meta( $post_id, $key, $value ) {
+    $GLOBALS['jsc_test_post_meta'][ $post_id ][ $key ] = $value;
+    return true;
+}
+
+function get_post_meta( $post_id, $key ) {
+    return $GLOBALS['jsc_test_post_meta'][ $post_id ][ $key ] ?? '';
 }
 
 function update_option( $name, $value ) {

@@ -7,5 +7,6 @@ cd "$repo_dir"
 bash tools/test-phase1.sh
 bash tools/test-phase2.sh
 bash tools/test-phase3.sh
+bash tools/test-phase4.sh
 
-echo 'All Phase 1, Phase 2, and Phase 3 tests passed.'
+echo 'All Phase 1, Phase 2, Phase 3, and Phase 4 tests passed.'

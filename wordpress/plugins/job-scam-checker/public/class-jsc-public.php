@@ -16,6 +16,7 @@ class JSC_Public {
     public function register_hooks() {
         add_action( 'wp_enqueue_scripts', array( $this, 'register_assets' ) );
         add_shortcode( 'job_scam_checker', array( $this, 'render_checker' ) );
+        add_shortcode( 'jsc_ad_slot', array( $this, 'render_ad_slot' ) );
     }
 
     /**
@@ -76,5 +77,18 @@ class JSC_Public {
         ob_start();
         require JSC_PLUGIN_DIR . 'public/views/checker-form.php';
         return (string) ob_get_clean();
+    }
+
+    /**
+     * Render an inert integration target for a future real advertising setup.
+     *
+     * @param array<string,string> $attributes Shortcode attributes.
+     * @return string
+     */
+    public function render_ad_slot( $attributes = array() ) {
+        $attributes = shortcode_atts( array( 'position' => 'article' ), $attributes, 'jsc_ad_slot' );
+        $position   = sanitize_key( $attributes['position'] );
+
+        return '<aside class="jsc-content-ad-slot" data-jsc-ad-position="' . esc_attr( $position ) . '" aria-label="' . esc_attr__( 'Advertisement', 'job-scam-checker' ) . '" hidden></aside>';
     }
 }

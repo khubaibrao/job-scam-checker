@@ -53,11 +53,13 @@
  * @param array<string,mixed> $args Menu arguments.
  */
 function jsc_theme_primary_menu_fallback( $args ) {
-    $checker = get_page_by_path( 'job-scam-checker' );
     ?>
     <ul id="<?php echo esc_attr( $args['menu_id'] ); ?>" class="menu">
         <li><a href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php esc_html_e( 'Home', 'job-scam-checker-theme' ); ?></a></li>
-        <li><a href="<?php echo esc_url( $checker ? get_permalink( $checker ) : home_url( '/job-scam-checker/' ) ); ?>"><?php esc_html_e( 'Check a Message', 'job-scam-checker-theme' ); ?></a></li>
+        <li><a href="<?php echo esc_url( home_url( '/job-scam-checker/' ) ); ?>"><?php esc_html_e( 'Check a Message', 'job-scam-checker-theme' ); ?></a></li>
+        <li><a href="<?php echo esc_url( home_url( '/job-scams/' ) ); ?>"><?php esc_html_e( 'Scam Types', 'job-scam-checker-theme' ); ?></a></li>
+        <li><a href="<?php echo esc_url( home_url( '/guides/' ) ); ?>"><?php esc_html_e( 'Guides', 'job-scam-checker-theme' ); ?></a></li>
+        <li><a href="<?php echo esc_url( home_url( '/about/' ) ); ?>"><?php esc_html_e( 'About', 'job-scam-checker-theme' ); ?></a></li>
     </ul>
     <?php
 }
