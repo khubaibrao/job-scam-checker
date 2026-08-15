@@ -45,6 +45,9 @@ class JSC_Public {
      * @return string
      */
     public function render_checker() {
+        if ( '0' === (string) get_option( 'jsc_checker_enabled', '1' ) ) {
+            return '<div class="jsc-checker-disabled" role="status"><p>' . esc_html__( 'The Job Scam Checker is temporarily unavailable.', 'job-scam-checker' ) . '</p></div>';
+        }
         static $instance = 0;
         ++$instance;
         $instance_id = 'jsc-checker-' . $instance;
@@ -58,6 +61,7 @@ class JSC_Public {
                 'endpoint' => esc_url_raw( rest_url( 'job-scam-checker/v1/analyze' ) ),
                 'followUpEndpoint' => esc_url_raw( rest_url( 'job-scam-checker/v1/follow-up' ) ),
                 'followUpEnabled'  => JSC_Statistics::follow_up_enabled(),
+                'resultFocusEnabled' => '0' !== (string) get_option( 'jsc_result_focus_enabled', '1' ),
                 'nonce'    => wp_create_nonce( 'jsc_analyze_message' ),
                 'labels'   => array(
                     'checking'       => __( 'Checking message…', 'job-scam-checker' ),
@@ -99,6 +103,7 @@ class JSC_Public {
 
     /** Render honest trends only after both comparison periods meet thresholds. */
     public function render_trends() {
+        if ( '0' === (string) get_option( 'jsc_trends_visible', '1' ) ) { return ''; }
         global $wpdb;
         $cached = get_transient( 'jsc_public_trends' );
         if ( ! is_array( $cached ) || ! array_key_exists( 'items', $cached ) ) {

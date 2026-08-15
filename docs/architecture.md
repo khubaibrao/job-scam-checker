@@ -39,3 +39,10 @@ date/metric/key primary key increments aggregate rows rather than creating
 visitor events. Safe keys cover totals, risk levels, detection-rule slugs and
 allow-listed follow-up selections. Messages and visitor identifiers never cross
 the aggregate repository boundary. Collection is disabled by default.
+
+Phase 6 keeps administration in the plugin. `JSC_Admin` owns native WordPress
+menu screens and state-changing handlers; the rule validator is the
+non-executable configuration boundary. Schema version 3 adds a protected-default
+marker to rule rows. Admin reports read the Phase 5 aggregate table, and reset
+performs a table-scoped row deletion only after capability, nonce, and explicit
+confirmation checks.

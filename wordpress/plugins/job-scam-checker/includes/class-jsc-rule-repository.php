@@ -39,6 +39,57 @@ class JSC_Rule_Repository {
         return is_array( $rules ) ? $rules : array();
     }
 
+    /** Return rules for administration, optionally filtered by a safe search term/category/status. */
+    public function get_rules( $search = '', $category = '', $status = '' ) {
+        $where = array( '1=1' );
+        $args  = array();
+        if ( '' !== $search ) {
+            $like    = '%' . $this->wpdb->esc_like( $search ) . '%';
+            $where[] = '(name LIKE %s OR slug LIKE %s OR explanation LIKE %s)';
+            array_push( $args, $like, $like, $like );
+        }
+        if ( '' !== $category ) { $where[] = 'category = %s'; $args[] = sanitize_key( $category ); }
+        if ( in_array( $status, array( 'enabled', 'disabled' ), true ) ) { $where[] = 'enabled = %d'; $args[] = 'enabled' === $status ? 1 : 0; }
+        $sql = "SELECT * FROM {$this->table} WHERE " . implode( ' AND ', $where ) . ' ORDER BY priority ASC, id ASC';
+        if ( $args ) { $sql = $this->wpdb->prepare( $sql, $args ); }
+        $rows = $this->wpdb->get_results( $sql, ARRAY_A );
+        return is_array( $rows ) ? $rows : array();
+    }
+
+    public function get_rule( $id ) {
+        $row = $this->wpdb->get_row( $this->wpdb->prepare( "SELECT * FROM {$this->table} WHERE id = %d LIMIT 1", (int) $id ), ARRAY_A );
+        return is_array( $row ) ? $row : null;
+    }
+
+    public function slug_exists( $slug, $exclude_id = 0 ) {
+        $sql = "SELECT id FROM {$this->table} WHERE slug = %s";
+        $args = array( $slug );
+        if ( $exclude_id ) { $sql .= ' AND id != %d'; $args[] = (int) $exclude_id; }
+        return (bool) $this->wpdb->get_var( $this->wpdb->prepare( $sql . ' LIMIT 1', $args ) );
+    }
+
+    /** Insert a validated custom rule. */
+    public function create( array $rule ) {
+        $now = current_time( 'mysql', true );
+        $data = array_merge( $rule, array( 'is_default' => 0, 'created_at' => $now, 'updated_at' => $now ) );
+        return $this->wpdb->insert( $this->table, $data, self::formats() ) ? (int) $this->wpdb->insert_id : 0;
+    }
+
+    /** Update only administrator-editable fields. */
+    public function update( $id, array $rule ) {
+        $rule['updated_at'] = current_time( 'mysql', true );
+        return false !== $this->wpdb->update( $this->table, $rule, array( 'id' => (int) $id ), array( '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%s', '%s', '%d', '%d', '%s' ), array( '%d' ) );
+    }
+
+    public function set_enabled( $id, $enabled ) {
+        return false !== $this->wpdb->update( $this->table, array( 'enabled' => $enabled ? 1 : 0, 'updated_at' => current_time( 'mysql', true ) ), array( 'id' => (int) $id ), array( '%d', '%s' ), array( '%d' ) );
+    }
+
+    /** Delete custom rules only; defaults fail closed. */
+    public function delete_custom( $id ) {
+        return false !== $this->wpdb->query( $this->wpdb->prepare( "DELETE FROM {$this->table} WHERE id = %d AND is_default = 0", (int) $id ) );
+    }
+
     /**
      * Insert rules that do not already exist by stable slug.
      *
@@ -56,6 +107,7 @@ class JSC_Rule_Repository {
                 continue;
             }
 
+            $rule['is_default'] = 1;
             $rule['created_at'] = $now;
             $rule['updated_at'] = $now;
             $this->wpdb->insert( $this->table, $rule, self::formats() );
@@ -66,6 +118,6 @@ class JSC_Rule_Repository {
      * @return array<int,string>
      */
     private static function formats() {
-        return array( '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%s', '%s', '%d', '%d', '%s', '%s' );
+        return array( '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%s', '%s', '%d', '%d', '%d', '%s', '%s' );
     }
 }

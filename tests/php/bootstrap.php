@@ -6,8 +6,8 @@
 define( 'ABSPATH', dirname( __DIR__, 2 ) . '/' );
 define( 'OBJECT', 'OBJECT' );
 define( 'ARRAY_A', 'ARRAY_A' );
-define( 'JSC_VERSION', '0.5.0' );
-define( 'JSC_DB_VERSION', '2.0.0' );
+define( 'JSC_VERSION', '0.6.0' );
+define( 'JSC_DB_VERSION', '3.0.0' );
 define( 'JSC_CONTENT_VERSION', '5.0.0' );
 define( 'JSC_PLUGIN_DIR', dirname( __DIR__, 2 ) . '/wordpress/plugins/job-scam-checker/' );
 define( 'JSC_PLUGIN_URL', 'https://example.test/wp-content/plugins/job-scam-checker/' );
@@ -44,6 +44,7 @@ class WP_Error {
     public function __construct( $code = '', $message = '', $data = array() ) {
         $this->code = $code; $this->message = $message; $this->data = $data;
     }
+    public function get_error_message() { return $this->message; }
 }
 
 class WP_REST_Response {
@@ -62,6 +63,7 @@ function esc_url_raw( $url ) { return filter_var( 0 === strpos( $url, 'www.' ) ?
 function wp_strip_all_tags( $text ) { return strip_tags( $text ); }
 function sanitize_key( $text ) { return preg_replace( '/[^a-z0-9_\-]/', '', strtolower( $text ) ); }
 function sanitize_text_field( $text ) { return trim( strip_tags( $text ) ); }
+function sanitize_textarea_field( $text ) { return trim( strip_tags( $text ) ); }
 function wp_parse_url( $url, $component = -1 ) { return parse_url( $url, $component ); }
 function wp_json_encode( $value ) { return json_encode( $value, JSON_UNESCAPED_SLASHES ); }
 function wp_unslash( $value ) { return $value; }
@@ -150,6 +152,8 @@ require_once JSC_PLUGIN_DIR . 'includes/class-jsc-statistics.php';
 require_once JSC_PLUGIN_DIR . 'includes/class-jsc-trend-provider.php';
 require_once JSC_PLUGIN_DIR . 'includes/class-jsc-settings.php';
 require_once JSC_PLUGIN_DIR . 'includes/class-jsc-rule-repository.php';
+require_once JSC_PLUGIN_DIR . 'admin/class-jsc-rule-validator.php';
+require_once JSC_PLUGIN_DIR . 'admin/class-jsc-admin.php';
 require_once JSC_PLUGIN_DIR . 'includes/class-jsc-link-analyzer.php';
 require_once JSC_PLUGIN_DIR . 'includes/class-jsc-risk-calculator.php';
 require_once JSC_PLUGIN_DIR . 'includes/class-jsc-recommendation-provider.php';

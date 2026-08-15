@@ -9,5 +9,6 @@ bash tools/test-phase2.sh
 bash tools/test-phase3.sh
 bash tools/test-phase4.sh
 bash tools/test-phase5.sh
+bash tools/test-phase6.sh
 
-echo 'All Phase 1, Phase 2, Phase 3, Phase 4, and Phase 5 tests passed.'
+echo 'All Phase 1 through Phase 6 tests passed.'

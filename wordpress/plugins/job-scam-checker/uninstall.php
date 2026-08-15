@@ -19,6 +19,12 @@ delete_option( 'jsc_installed_pages' );
 delete_option( 'jsc_statistics_enabled' );
 delete_option( 'jsc_follow_up_enabled' );
 delete_option( 'jsc_statistics_retention_days' );
+delete_option( 'jsc_checker_enabled' );
+delete_option( 'jsc_trends_visible' );
+delete_option( 'jsc_search_filters_enabled' );
+delete_option( 'jsc_related_content_enabled' );
+delete_option( 'jsc_result_focus_enabled' );
+delete_option( 'jsc_rule_categories' );
 wp_clear_scheduled_hook( 'jsc_daily_cleanup' );
 
 global $wpdb;

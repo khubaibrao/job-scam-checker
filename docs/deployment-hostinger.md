@@ -19,9 +19,12 @@ service.
    public launch; the project deliberately invents none.
 10. Confirm `/wp-sitemap.xml` and `/robots.txt`, then submit the sitemap to Search
     Console only if desired.
-11. Review **Settings → Job Scam Checker**. Anonymous statistics are disabled by
+11. Review **Job Scam Checker → Settings**. Anonymous statistics are disabled by
     default. Choose whether to enable them and the optional follow-up questions,
     then select aggregate retention from 30 to 730 days.
+12. Open **Job Scam Checker → Rules** and confirm the default library is present.
+    Shipped rules can be edited or disabled but cannot be deleted. Review the
+    Overview, Statistics and Content shortcuts before launch.
 
 The plugin activation routine creates `/home/` and `/job-scam-checker/` only when
 those slugs do not already exist. The Phase 4 content release also creates the
@@ -38,3 +41,7 @@ No production Node.js process, Composer packages, cron worker, external API,
 Redis instance, separate database, visitor account, or paid service is needed.
 Phase 5 uses normal WordPress pseudo-cron for a small daily retention task and
 one indexed aggregate table. It needs no Hostinger cron configuration.
+
+Updating from Phase 5 runs a normal WordPress `dbDelta` migration that adds the
+protected-default marker to the existing rules table. It preserves existing
+rules, aggregate statistics, options, and content. No manual SQL is required.

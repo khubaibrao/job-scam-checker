@@ -59,6 +59,7 @@ function jsc_theme_breadcrumbs() {
  * Print curated related links saved by the content installer.
  */
 function jsc_theme_related_content() {
+    if ( '0' === (string) get_option( 'jsc_related_content_enabled', '1' ) ) { return; }
     $related_keys = get_post_meta( get_the_ID(), '_jsc_related_pages', true );
     $installed    = get_option( 'jsc_installed_pages', array() );
     if ( ! is_array( $installed ) ) {

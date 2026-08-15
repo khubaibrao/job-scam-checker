@@ -31,6 +31,7 @@ class JSC_Schema {
             recommendation text NOT NULL,
             enabled tinyint(1) unsigned NOT NULL DEFAULT 1,
             priority smallint(5) unsigned NOT NULL DEFAULT 100,
+            is_default tinyint(1) unsigned NOT NULL DEFAULT 0,
             created_at datetime NOT NULL,
             updated_at datetime NOT NULL,
             PRIMARY KEY  (id),
@@ -41,6 +42,13 @@ class JSC_Schema {
 
         require_once ABSPATH . 'wp-admin/includes/upgrade.php';
         dbDelta( $sql );
+
+        // Stable shipped slugs identify protected defaults during the Phase 6 migration.
+        $default_slugs = array_column( require JSC_PLUGIN_DIR . 'data/default-rules.php', 'slug' );
+        if ( $default_slugs ) {
+            $placeholders = implode( ', ', array_fill( 0, count( $default_slugs ), '%s' ) );
+            $wpdb->query( $wpdb->prepare( "UPDATE {$table_name} SET is_default = 1 WHERE slug IN ({$placeholders})", $default_slugs ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Controlled table and generated placeholders.
+        }
 
         $stats_table = $wpdb->prefix . 'jsc_daily_stats';
         $stats_sql   = "CREATE TABLE {$stats_table} (

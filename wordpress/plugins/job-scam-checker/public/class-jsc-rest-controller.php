@@ -48,6 +48,9 @@ class JSC_REST_Controller {
      * @return WP_REST_Response|WP_Error
      */
     public function analyze( $request ) {
+        if ( '0' === (string) get_option( 'jsc_checker_enabled', '1' ) ) {
+            return new WP_Error( 'jsc_checker_disabled', __( 'The Job Scam Checker is temporarily unavailable.', 'job-scam-checker' ), array( 'status' => 503 ) );
+        }
         $nonce = $request->get_header( 'X-JSC-Nonce' );
         if ( ! $nonce || ! wp_verify_nonce( $nonce, 'jsc_analyze_message' ) ) {
             return new WP_Error( 'jsc_invalid_nonce', __( 'Security check failed. Refresh the page and try again.', 'job-scam-checker' ), array( 'status' => 403 ) );

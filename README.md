@@ -33,11 +33,17 @@ native filtered WordPress search, and broader related-content paths. Statistics
 are disabled by default and never store pasted messages or visitor profiles. See
 `docs/phase5-trends-search.md`.
 
+Phase 6 adds a dedicated native WordPress administration area with real-data
+overview and statistics screens, validated rule management, protected default
+rules, organized checker/privacy/display settings, a tightly scoped aggregate
+reset, and links into normal WordPress page editing. See
+`docs/phase6-admin-management.md`.
+
 ## Tests
 
 ```bash
 bash tools/test-all.sh
 ```
 
-See `docs/deployment-hostinger.md` for installation details. Review **Settings →
-Job Scam Checker** before choosing whether to enable anonymous statistics.
+See `docs/deployment-hostinger.md` for installation details. Review **Job Scam
+Checker → Settings** before choosing whether to enable anonymous statistics.

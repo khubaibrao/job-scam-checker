@@ -3,7 +3,7 @@
  * Plugin Name:       Job Scam Checker
  * Plugin URI:        https://example.com/job-scam-checker
  * Description:       Privacy-first, rule-based job scam checking tools and site foundations.
- * Version:           0.5.0
+ * Version:           0.6.0
  * Requires at least: 6.4
  * Requires PHP:      7.4
  * Author:            Job Scam Checker
@@ -16,8 +16,8 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-define( 'JSC_VERSION', '0.5.0' );
-define( 'JSC_DB_VERSION', '2.0.0' );
+define( 'JSC_VERSION', '0.6.0' );
+define( 'JSC_DB_VERSION', '3.0.0' );
 define( 'JSC_CONTENT_VERSION', '5.0.0' );
 define( 'JSC_PLUGIN_FILE', __FILE__ );
 define( 'JSC_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
@@ -28,6 +28,8 @@ require_once JSC_PLUGIN_DIR . 'includes/class-jsc-statistics-repository.php';
 require_once JSC_PLUGIN_DIR . 'includes/class-jsc-statistics.php';
 require_once JSC_PLUGIN_DIR . 'includes/class-jsc-trend-provider.php';
 require_once JSC_PLUGIN_DIR . 'includes/class-jsc-settings.php';
+require_once JSC_PLUGIN_DIR . 'admin/class-jsc-rule-validator.php';
+require_once JSC_PLUGIN_DIR . 'admin/class-jsc-admin.php';
 require_once JSC_PLUGIN_DIR . 'includes/class-jsc-schema.php';
 require_once JSC_PLUGIN_DIR . 'includes/class-jsc-rule-repository.php';
 require_once JSC_PLUGIN_DIR . 'includes/class-jsc-link-analyzer.php';

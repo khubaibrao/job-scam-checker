@@ -11,17 +11,31 @@ class JSC_Settings {
     }
 
     public function add_page() {
-        add_options_page( __( 'Job Scam Checker Privacy', 'job-scam-checker' ), __( 'Job Scam Checker', 'job-scam-checker' ), 'manage_options', 'job-scam-checker', array( $this, 'render_page' ) );
+        // Phase 6 owns the top-level admin screens; retain registration here only.
     }
 
     public function register_settings() {
         register_setting( 'jsc_privacy', 'jsc_statistics_enabled', array( 'type' => 'string', 'sanitize_callback' => array( $this, 'checkbox' ), 'default' => '0' ) );
         register_setting( 'jsc_privacy', 'jsc_follow_up_enabled', array( 'type' => 'string', 'sanitize_callback' => array( $this, 'checkbox' ), 'default' => '1' ) );
         register_setting( 'jsc_privacy', 'jsc_statistics_retention_days', array( 'type' => 'integer', 'sanitize_callback' => array( $this, 'retention' ), 'default' => 365 ) );
+        register_setting( 'jsc_management', 'jsc_checker_enabled', array( 'type' => 'string', 'sanitize_callback' => array( $this, 'checkbox' ), 'default' => '1' ) );
+        register_setting( 'jsc_management', 'jsc_follow_up_enabled', array( 'type' => 'string', 'sanitize_callback' => array( $this, 'checkbox' ), 'default' => '1' ) );
+        register_setting( 'jsc_management', 'jsc_statistics_enabled', array( 'type' => 'string', 'sanitize_callback' => array( $this, 'checkbox' ), 'default' => '0' ) );
+        register_setting( 'jsc_management', 'jsc_statistics_retention_days', array( 'type' => 'integer', 'sanitize_callback' => array( $this, 'retention' ), 'default' => 365 ) );
+        register_setting( 'jsc_management', 'jsc_trends_visible', array( 'type' => 'string', 'sanitize_callback' => array( $this, 'checkbox' ), 'default' => '1' ) );
+        register_setting( 'jsc_management', 'jsc_search_filters_enabled', array( 'type' => 'string', 'sanitize_callback' => array( $this, 'checkbox' ), 'default' => '1' ) );
+        register_setting( 'jsc_management', 'jsc_related_content_enabled', array( 'type' => 'string', 'sanitize_callback' => array( $this, 'checkbox' ), 'default' => '1' ) );
+        register_setting( 'jsc_management', 'jsc_result_focus_enabled', array( 'type' => 'string', 'sanitize_callback' => array( $this, 'checkbox' ), 'default' => '1' ) );
+        register_setting( 'jsc_management', 'jsc_rule_categories', array( 'type' => 'array', 'sanitize_callback' => array( $this, 'categories' ), 'default' => array() ) );
     }
 
     public function checkbox( $value ) { return '1' === (string) $value ? '1' : '0'; }
     public function retention( $value ) { return min( 730, max( 30, (int) $value ) ); }
+    public function categories( $value ) {
+        $items = is_array( $value ) ? $value : explode( ',', (string) $value );
+        $items = array_filter( array_map( 'sanitize_key', $items ) );
+        return array_slice( array_values( array_unique( $items ) ), 0, 30 );
+    }
 
     public function render_page() {
         if ( ! current_user_can( 'manage_options' ) ) { return; }

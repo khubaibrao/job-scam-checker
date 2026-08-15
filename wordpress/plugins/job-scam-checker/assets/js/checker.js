@@ -165,8 +165,10 @@
       errorPanel.hidden = true;
       result.hidden = false;
       status.textContent = config.labels.resultReady + ' ' + data.level.label + ', score ' + data.score + ' out of 100, ' + data.warning_count + ' ' + countLabel + '.';
-      result.focus({ preventScroll: true });
-      result.scrollIntoView(scrollOptions('start'));
+      if (config.resultFocusEnabled !== false) {
+        result.focus({ preventScroll: true });
+        result.scrollIntoView(scrollOptions('start'));
+      }
     }
 
     function parseResponse(response) {

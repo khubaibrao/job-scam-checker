@@ -26,6 +26,9 @@ class JSC_Plugin {
         $settings = new JSC_Settings();
         $settings->register_hooks();
 
+        $admin = new JSC_Admin();
+        $admin->register_hooks();
+
         if ( ! wp_next_scheduled( 'jsc_daily_cleanup' ) ) {
             wp_schedule_event( time() + DAY_IN_SECONDS, 'daily', 'jsc_daily_cleanup' );
         }

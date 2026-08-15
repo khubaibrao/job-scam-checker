@@ -83,4 +83,28 @@ class JSC_Statistics_Repository {
     public function delete_before( $date ) {
         return $this->wpdb->query( $this->wpdb->prepare( "DELETE FROM {$this->table} WHERE stat_date < %s", $date ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Controlled prefixed table name.
     }
+
+    /** Return all-time counts for an allow-listed metric. */
+    public function totals( $metric ) {
+        $allowed = array( 'checks', 'risk_level', 'detection', 'channel', 'money_request', 'payment_purpose' );
+        if ( ! in_array( $metric, $allowed, true ) ) { return array(); }
+        $rows = $this->wpdb->get_results( $this->wpdb->prepare( "SELECT stat_key, SUM(stat_count) AS total FROM {$this->table} WHERE metric = %s GROUP BY stat_key ORDER BY total DESC", $metric ), ARRAY_A );
+        $out = array();
+        foreach ( is_array( $rows ) ? $rows : array() as $row ) { $out[ $row['stat_key'] ] = (int) $row['total']; }
+        return $out;
+    }
+
+    /** Daily total checks, newest first. */
+    public function daily_totals( $limit = 30 ) {
+        $limit = min( 365, max( 1, (int) $limit ) );
+        $rows = $this->wpdb->get_results( $this->wpdb->prepare( "SELECT stat_date, stat_count AS total FROM {$this->table} WHERE metric = %s AND stat_key = %s ORDER BY stat_date DESC LIMIT %d", 'checks', 'total', $limit ), ARRAY_A );
+        return is_array( $rows ) ? $rows : array();
+    }
+
+    /** Reset aggregate rows only. */
+    public function reset() {
+        $deleted = $this->wpdb->query( "DELETE FROM {$this->table}" ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- Controlled table, intentionally all aggregate rows.
+        if ( false !== $deleted ) { delete_transient( 'jsc_public_trends' ); }
+        return false !== $deleted;
+    }
 }

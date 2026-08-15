@@ -36,6 +36,12 @@ empty states, bounded privacy settings, aggregate table keys, native page search
 curated excerpts, allow-listed filters, no-results guidance, and the Privacy
 Policy upgrade contract.
 
+Phase 6 validates capability and nonce boundaries, settings sanitization,
+checker/display/privacy controls, rule creation/edit/status/duplication paths,
+risk-weight and pattern validation, arbitrary-code rejection, custom deletion
+and default protection, aggregate dashboard metrics, scoped admin assets, and an
+explicitly confirmed reset that targets only the Phase 5 aggregate table.
+
 After deployment to a WordPress staging site, manually verify:
 
 - Plugin and theme activation with debug logging enabled
@@ -46,7 +52,10 @@ After deployment to a WordPress staging site, manually verify:
 - Home/checker page creation and repeat activation
 - Permalinks, page title, description, and Open Graph tags
 - Theme behavior when the plugin is inactive
-- Anonymous-statistics and follow-up toggles under Settings → Job Scam Checker
+- Every screen under Job Scam Checker, including honest empty states
+- Rule search/filter, create, edit, duplicate, enable/disable and protected deletion
+- Checker, statistics, privacy, display, search and related-content settings
+- Aggregate reset and confirmation that content, rules and settings remain intact
 - Trend empty state before two real-data periods meet the sample thresholds
 - Search queries, content filters, pagination and no-results checker link
 - Daily aggregate retention cleanup through WordPress cron
